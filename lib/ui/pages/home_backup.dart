@@ -81,52 +81,59 @@ class HomePage extends StatelessWidget {
                   SizedBox(
                     height: 12,
                   ),
-                  Container(
-                    width: 210,
-                    height: 140,
-                    child: Stack(
-                      children: [
-                        Container(
-                            width: 210,
-                            height: 140,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.asset(
-                                'assets/images/avengers.png',
-                                fit: BoxFit.fill,
-                              ),
-                            )),
-                        Column(
-                          children: [
-                            Container(
-                              height: 100,
-                              alignment: Alignment.bottomLeft,
-                              padding: EdgeInsets.only(bottom: 0, left: 16),
-                              child: Text(
-                                "Avengers",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Raleway',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.bottomLeft,
-                              padding: EdgeInsets.only(bottom: 10, left: 16),
-                              child: Text(
-                                "Avenger",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Raleway',
-                                    fontSize: 14),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
+                  ListView.builder(
+                      padding: EdgeInsets.all(10),
+                      itemCount: 3,
+                      itemBuilder: (BuildContext context, index) {
+                        return (Container(
+                          width: 210,
+                          height: 140,
+                          child: Stack(
+                            children: [
+                              Container(
+                                  width: 210,
+                                  height: 140,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.asset(
+                                      'assets/images/avengers.png',
+                                      fit: BoxFit.fill,
+                                    ),
+                                  )),
+                              Column(
+                                children: [
+                                  Container(
+                                    height: 100,
+                                    alignment: Alignment.bottomLeft,
+                                    padding:
+                                        EdgeInsets.only(bottom: 0, left: 16),
+                                    child: Text(
+                                      "Avengers",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'Raleway',
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.bottomLeft,
+                                    padding:
+                                        EdgeInsets.only(bottom: 10, left: 16),
+                                    child: Text(
+                                      "Avenger",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'Raleway',
+                                          fontSize: 14),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ));
+                      }),
                 ],
               ),
             ),

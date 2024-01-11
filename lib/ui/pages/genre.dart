@@ -1,3 +1,4 @@
+import 'package:flutix/model/movie_playing.dart';
 import 'package:flutix/ui/widgets/genre_tile.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutix/ui/widgets/header.dart';
