@@ -1,4 +1,3 @@
-import 'package:flutix/model/movie_playing.dart';
 import 'package:flutix/ui/widgets/genre_tile.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutix/ui/widgets/header.dart';
@@ -33,9 +32,9 @@ class _GenreState extends State<Genre> {
 
   @override
   Widget build(BuildContext context) {
-    return (Scaffold(
-      body: SafeArea(
-        child: Container(
+    return SafeArea(
+      child: (Scaffold(
+        body: Container(
           padding: const EdgeInsets.all(16),
           width: double.infinity,
           color: Colors.white,
@@ -118,8 +117,8 @@ class _GenreState extends State<Genre> {
             ],
           ),
         ),
-      ),
-    ));
+      )),
+    );
   }
 
   void _onSelectedGenre(int index) {

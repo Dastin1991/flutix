@@ -7,9 +7,9 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (Scaffold(
-      body: SafeArea(
-        child: Container(
+    return SafeArea(
+      child: (Scaffold(
+        body: Container(
           padding: const EdgeInsets.all(16),
           width: double.infinity,
           color: Colors.white,
@@ -85,7 +85,7 @@ class SignUp extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    ));
+      )),
+    );
   }
 }

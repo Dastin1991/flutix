@@ -7,9 +7,9 @@ class OnBoarding extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (Scaffold(
-      body: SafeArea(
-        child: Container(
+    return SafeArea(
+      child: (Scaffold(
+        body: Container(
           color: Colors.white,
           child: Center(
             child: Column(
@@ -94,7 +94,7 @@ class OnBoarding extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    ));
+      )),
+    );
   }
 }

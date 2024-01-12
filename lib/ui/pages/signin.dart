@@ -8,9 +8,9 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (Scaffold(
-      body: SafeArea(
-        child: Container(
+    return SafeArea(
+      child: (Scaffold(
+        body: Container(
           width: double.infinity,
           color: Colors.white,
           child: Column(
@@ -101,7 +101,7 @@ class SignIn extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    ));
+      )),
+    );
   }
 }
