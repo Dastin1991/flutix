@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class OnBoarding extends StatelessWidget {
   const OnBoarding({Key? key}) : super(key: key);
@@ -16,19 +14,19 @@ class OnBoarding extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: 200,
                   height: 200,
                   child: Column(
-                    children: [
+                    children: const [
                       Image(image: AssetImage("assets/images/logo.png"))
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 70,
                 ),
-                Text(
+                const Text(
                   "New Experience",
                   style: TextStyle(
                       fontFamily: "Raleway",
@@ -36,9 +34,9 @@ class OnBoarding extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 16),
+                  margin: const EdgeInsets.only(top: 16),
                   width: 200,
-                  child: Text(
+                  child: const Text(
                     "Watch a new movie much easier than any before",
                     style: TextStyle(
                       color: Color(0xffADADAD),
@@ -49,38 +47,38 @@ class OnBoarding extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 70,
                 ),
-                Container(
+                SizedBox(
                     width: 250,
                     height: 50,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: Color(0xff503E9D)),
+                            primary: const Color(0xff503E9D)),
                         onPressed: () {
                           Navigator.pushNamed(context, '/signup');
                         },
-                        child: Text("Get Started"))),
-                SizedBox(
+                        child: const Text("Get Started"))),
+                const SizedBox(
                   height: 19,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Already have an account?",
                       style: TextStyle(
                           fontFamily: "Raleway",
                           color: Color(0xffADADAD),
                           fontSize: 14),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 6,
                     ),
                     InkWell(
                       onTap: () => Navigator.pushNamed(context, '/signin'),
-                      child: Text(
+                      child: const Text(
                         "Sign In",
                         style: TextStyle(
                             fontSize: 14,

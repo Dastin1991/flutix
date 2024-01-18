@@ -30,7 +30,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-  status_bar_control: ^3.2.1
 
 dev_dependencies:
   # The "flutter_lints" package below contains a set of recommended lints to

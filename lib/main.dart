@@ -1,6 +1,8 @@
 import 'package:flutix/ui/pages/confirm_account.dart';
 import 'package:flutix/ui/pages/genre.dart';
 import 'package:flutix/ui/pages/home.dart';
+import 'package:flutix/ui/pages/menu.dart';
+import 'package:flutix/ui/pages/movie_detail.dart';
 import 'package:flutix/ui/pages/onboarding.dart';
 import 'package:flutix/ui/pages/signin.dart';
 import 'package:flutix/ui/pages/signup.dart';
@@ -24,7 +26,8 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => const SignUp(),
         '/genre': (context) => const Genre(),
         '/confirm': (context) => const ConfirmAccount(),
-        '/home': (context) => const HomePage(),
+        '/home': (context) => const Menu(),
+        '/movieDetail': (context) => const MovieDetail(),
       },
     ));
   }

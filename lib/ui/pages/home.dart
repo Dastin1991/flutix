@@ -6,8 +6,6 @@ import 'package:flutix/ui/widgets/lucky_day_card.dart';
 import 'package:flutix/ui/widgets/movie_card.dart';
 import 'package:flutix/ui/widgets/text_custom.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:status_bar_control/status_bar_control.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -180,6 +178,10 @@ class _HomePageState extends State<HomePage> {
                               moviePlaying.length,
                               (index) => MovieCard(
                                     movie: moviePlaying[index],
+                                    onTap: () {
+                                      handlerClickMovie(
+                                          context, moviePlaying[index]);
+                                    },
                                   )),
                         ),
                       ),
@@ -274,4 +276,8 @@ class _HomePageState extends State<HomePage> {
       )),
     );
   }
+}
+
+void handlerClickMovie(BuildContext context, MoviePlaying movie) {
+  Navigator.pushNamed(context, '/movieDetail', arguments: movie);
 }
