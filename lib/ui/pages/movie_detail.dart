@@ -1,4 +1,6 @@
+import 'package:flutix/model/crew.dart';
 import 'package:flutix/model/movie_playing.dart';
+import 'package:flutix/ui/widgets/crew_card.dart';
 import 'package:flutter/material.dart';
 
 class MovieDetail extends StatelessWidget {
@@ -10,6 +12,14 @@ class MovieDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     final arg = ModalRoute.of(context)!.settings.arguments;
     MoviePlaying? movie;
+
+    List<Crew> crew = [
+      Crew(name: 'Robbie Maggot', profile: 'assets/images/crew_1.png'),
+      Crew(name: 'Robert Downey Jr', profile: 'assets/images/crew_2.png'),
+      Crew(name: 'Chris Hemsworth', profile: 'assets/images/crew_3.png'),
+      Crew(name: 'Josh Thanos', profile: 'assets/images/crew_4.png'),
+      Crew(name: 'Tom Holland', profile: 'assets/images/crew_5.png'),
+    ];
 
     if (arg is MoviePlaying) {
       movie = arg;
@@ -51,22 +61,41 @@ class MovieDetail extends StatelessWidget {
                     padding: const EdgeInsets.all(24.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           "Cast & Crew",
                           style: TextStyle(fontFamily: 'Raleway', fontSize: 14),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
-                        Text(
+                        SizedBox(
+                          height: 140,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Wrap(
+                              spacing: 10,
+                              runSpacing: 10,
+                              children: List.generate(
+                                  crew.length,
+                                  (index) => CrewCard(
+                                        crew: crew[index],
+                                        onTap: () {},
+                                      )),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        const Text(
                           "Storyline",
                           style: TextStyle(fontFamily: 'Raleway', fontSize: 14),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
-                        Text(
+                        const Text(
                           "The near future, a time when both hope and hard ships drive humanity to look to the stars and beyond while a mysterious.\n\nNick Fury is compelled to launch the Avengers Initiative when Loki poses a threat to planet Earth. His squad of superheroes put their minds together to accomplish the task.",
                           style: TextStyle(
                               fontFamily: 'Raleway',
