@@ -1,4 +1,5 @@
 import 'package:flutix/ui/pages/choose_date.dart';
+import 'package:flutix/ui/pages/choose_row.dart';
 import 'package:flutix/ui/pages/confirm_account.dart';
 import 'package:flutix/ui/pages/genre.dart';
 import 'package:flutix/ui/pages/home.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const Menu(),
         '/movieDetail': (context) => const MovieDetail(),
         '/chooseDate': (context) => const ChooseDate(),
+        '/chooseRow': (context) => const ChooseRow(),
         '/profile': (context) => const Profile(),
       },
     ));

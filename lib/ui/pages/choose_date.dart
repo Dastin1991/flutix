@@ -1,4 +1,7 @@
+import 'package:flutix/model/cinema.dart';
+import 'package:flutix/model/cinema_time.dart';
 import 'package:flutix/model/dates.dart';
+import 'package:flutix/ui/widgets/cinema_tile.dart';
 import 'package:flutix/ui/widgets/dates_tile.dart';
 import 'package:flutix/ui/widgets/genre_tile.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
@@ -19,6 +22,19 @@ class _ChooseDateState extends State<ChooseDate> {
     Dates(date: '23', day: 'MON'),
     Dates(date: '24', day: 'TUE'),
     Dates(date: '25', day: 'WED'),
+  ];
+
+  List<Cinema> cinemas = [
+    Cinema(name: "Paris Van Java", times: [
+      CinemaTime(time: "12:20"),
+      CinemaTime(time: "15:40"),
+      CinemaTime(time: "18:20"),
+      CinemaTime(time: "20:20"),
+      CinemaTime(time: "23:20"),
+    ]),
+    Cinema(name: "Cihampelas Walk", times: [CinemaTime(time: "10:00")]),
+    Cinema(
+        name: "Bandung Elektronik Center", times: [CinemaTime(time: "10:00")]),
   ];
 
   List<String> selectedDate = <String>[];
@@ -72,6 +88,15 @@ class _ChooseDateState extends State<ChooseDate> {
                     const SizedBox(
                       height: 16,
                     ),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: List.generate(
+                          cinemas.length,
+                          (index) => CinemaTile(
+                                cinemas: cinemas[index],
+                              )),
+                    )
                   ],
                 ),
               ),
@@ -80,7 +105,7 @@ class _ChooseDateState extends State<ChooseDate> {
               ),
               ButtonIcon(
                 onTap: () {
-                  Navigator.pushNamed(context, '/confirm');
+                  Navigator.pushNamed(context, '/chooseRow');
                 },
               )
             ],

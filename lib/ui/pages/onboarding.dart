@@ -55,7 +55,8 @@ class OnBoarding extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: const Color(0xff503E9D)),
+                            backgroundColor: const Color(0xff503E9D),
+                            foregroundColor: Colors.white),
                         onPressed: () {
                           Navigator.pushNamed(context, '/signup');
                         },

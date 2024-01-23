@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class Header extends StatelessWidget {
+class HeaderContent extends StatelessWidget {
   final String title;
-  Header({required this.title});
+  HeaderContent({required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return (Container(
+    return (SizedBox(
       height: 50,
       child: Row(
         children: [

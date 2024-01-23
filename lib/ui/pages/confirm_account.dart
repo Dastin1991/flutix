@@ -64,7 +64,8 @@ class ConfirmAccount extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: Color(0xff3E9D9D)),
+                            backgroundColor: Color(0xff3E9D9D),
+                            foregroundColor: Colors.white),
                         onPressed: () {
                           Navigator.pushNamed(context, '/home');
                         },

@@ -27,98 +27,103 @@ class MovieDetail extends StatelessWidget {
     return SafeArea(
       child: (Scaffold(
         body: movie != null
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                      width: double.infinity,
-                      height: 270,
-                      child: Image(
-                        image: AssetImage(movie.link),
-                        fit: BoxFit.cover,
-                      )),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Center(
-                    child: Text(
-                      movie.title,
-                      style:
-                          const TextStyle(fontFamily: 'Raleway', fontSize: 24),
+            ? SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                        width: double.infinity,
+                        height: 270,
+                        child: Image(
+                          image: AssetImage(movie.link),
+                          fit: BoxFit.cover,
+                        )),
+                    const SizedBox(
+                      height: 16,
                     ),
-                  ),
-                  const Center(
-                    child: const Text(
-                      "Action - English",
-                      style: const TextStyle(
-                          fontFamily: 'Raleway',
-                          fontSize: 12,
-                          color: Color(0xFFADADAD)),
+                    Center(
+                      child: Text(
+                        movie.title,
+                        style: const TextStyle(
+                            fontFamily: 'Raleway', fontSize: 24),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Cast & Crew",
-                          style: TextStyle(fontFamily: 'Raleway', fontSize: 14),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        SizedBox(
-                          height: 140,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Wrap(
-                              spacing: 10,
-                              runSpacing: 10,
-                              children: List.generate(
-                                  crew.length,
-                                  (index) => CrewCard(
-                                        crew: crew[index],
-                                        onTap: () {},
-                                      )),
+                    const Center(
+                      child: const Text(
+                        "Action - English",
+                        style: const TextStyle(
+                            fontFamily: 'Raleway',
+                            fontSize: 12,
+                            color: Color(0xFFADADAD)),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Cast & Crew",
+                            style:
+                                TextStyle(fontFamily: 'Raleway', fontSize: 14),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          SizedBox(
+                            height: 140,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Wrap(
+                                spacing: 10,
+                                runSpacing: 10,
+                                children: List.generate(
+                                    crew.length,
+                                    (index) => CrewCard(
+                                          crew: crew[index],
+                                          onTap: () {},
+                                        )),
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        const Text(
-                          "Storyline",
-                          style: TextStyle(fontFamily: 'Raleway', fontSize: 14),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        const Text(
-                          "The near future, a time when both hope and hard ships drive humanity to look to the stars and beyond while a mysterious.\n\nNick Fury is compelled to launch the Avengers Initiative when Loki poses a threat to planet Earth. His squad of superheroes put their minds together to accomplish the task.",
-                          style: TextStyle(
-                              fontFamily: 'Raleway',
-                              fontSize: 14,
-                              color: Color(0xFFADADAD)),
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          const Text(
+                            "Storyline",
+                            style:
+                                TextStyle(fontFamily: 'Raleway', fontSize: 14),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          const Text(
+                            "The near future, a time when both hope and hard ships drive humanity to look to the stars and beyond while a mysterious.\n\nNick Fury is compelled to launch the Avengers Initiative when Loki poses a threat to planet Earth. His squad of superheroes put their minds together to accomplish the task.",
+                            style: TextStyle(
+                                fontFamily: 'Raleway',
+                                fontSize: 14,
+                                color: Color(0xFFADADAD)),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                        width: 250,
-                        height: 50,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: const Color(0xff503E9D)),
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/chooseDate');
-                            },
-                            child: const Text("Continue to Book"))),
-                  ),
-                ],
+                    Align(
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                          width: 250,
+                          height: 50,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xff503E9D),
+                                  foregroundColor: Colors.white),
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/chooseDate');
+                              },
+                              child: const Text("Continue to Book"))),
+                    ),
+                  ],
+                ),
               )
             : Container(),
       )),
