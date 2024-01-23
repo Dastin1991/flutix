@@ -114,7 +114,7 @@ class MovieDetail extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                                 primary: const Color(0xff503E9D)),
                             onPressed: () {
-                              Navigator.pushNamed(context, '/signup');
+                              Navigator.pushNamed(context, '/chooseDate');
                             },
                             child: const Text("Continue to Book"))),
                   ),

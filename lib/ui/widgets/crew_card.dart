@@ -33,7 +33,7 @@ class CrewCard extends StatelessWidget {
               ),
               Text(
                 crew.name,
-                style: TextStyle(fontFamily: 'Raleway', fontSize: 14),
+                style: const TextStyle(fontFamily: 'Raleway', fontSize: 12),
                 textAlign: TextAlign.center,
               )
             ],

@@ -1,9 +1,11 @@
+import 'package:flutix/ui/pages/choose_date.dart';
 import 'package:flutix/ui/pages/confirm_account.dart';
 import 'package:flutix/ui/pages/genre.dart';
 import 'package:flutix/ui/pages/home.dart';
 import 'package:flutix/ui/pages/menu.dart';
 import 'package:flutix/ui/pages/movie_detail.dart';
 import 'package:flutix/ui/pages/onboarding.dart';
+import 'package:flutix/ui/pages/profile.dart';
 import 'package:flutix/ui/pages/signin.dart';
 import 'package:flutix/ui/pages/signup.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,8 @@ class MyApp extends StatelessWidget {
         '/confirm': (context) => const ConfirmAccount(),
         '/home': (context) => const Menu(),
         '/movieDetail': (context) => const MovieDetail(),
+        '/chooseDate': (context) => const ChooseDate(),
+        '/profile': (context) => const Profile(),
       },
     ));
   }

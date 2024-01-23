@@ -118,12 +118,17 @@ class _HomePageState extends State<HomePage> {
                     height: 50,
                     child: Row(
                       children: [
-                        const SizedBox(
+                        SizedBox(
                           height: 64,
                           width: 64,
-                          child: CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/images/user_profile.jpeg'),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/profile');
+                            },
+                            child: const CircleAvatar(
+                              backgroundImage:
+                                  AssetImage('assets/images/user_profile.jpeg'),
+                            ),
                           ),
                         ),
                         Container(
