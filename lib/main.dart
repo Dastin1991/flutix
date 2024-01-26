@@ -1,3 +1,5 @@
+import 'package:flutix/ui/pages/checkout_movie.dart';
+import 'package:flutix/ui/pages/checkout_success.dart';
 import 'package:flutix/ui/pages/choose_date.dart';
 import 'package:flutix/ui/pages/choose_row.dart';
 import 'package:flutix/ui/pages/confirm_account.dart';
@@ -24,16 +26,18 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => const OnBoarding(),
-        '/signin': (context) => const SignIn(),
-        '/signup': (context) => const SignUp(),
-        '/genre': (context) => const Genre(),
-        '/confirm': (context) => const ConfirmAccount(),
-        '/home': (context) => const Menu(),
-        '/movieDetail': (context) => const MovieDetail(),
-        '/chooseDate': (context) => const ChooseDate(),
-        '/chooseRow': (context) => const ChooseRow(),
-        '/profile': (context) => const Profile(),
+        '/': (_) => const OnBoarding(),
+        '/signin': (_) => const SignIn(),
+        '/signup': (_) => const SignUp(),
+        '/genre': (_) => const Genre(),
+        '/confirm': (_) => const ConfirmAccount(),
+        '/home': (_) => const Menu(),
+        '/movieDetail': (_) => const MovieDetail(),
+        '/chooseDate': (_) => const ChooseDate(),
+        '/chooseRow': (_) => const ChooseRow(),
+        '/checkoutMovie': (_) => const CheckoutMovie(),
+        '/checkoutSuccess': (_) => const CheckoutSuccess(),
+        '/profile': (_) => const Profile(),
       },
     ));
   }

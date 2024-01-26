@@ -25,13 +25,17 @@ class _MenuState extends State<Menu> {
   Widget build(BuildContext context) {
     return (Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: Colors.amber[500],
-          child: const Icon(Icons.download),
+        floatingActionButton: ClipRRect(
+          borderRadius: BorderRadius.circular(100),
+          child: FloatingActionButton(
+            onPressed: () {},
+            backgroundColor: Colors.amber[500],
+            child: const Icon(Icons.download),
+          ),
         ),
         body: _widgetOptions.elementAt(_selectedIndex),
         bottomNavigationBar: BottomAppBar(
+          color: Colors.white,
           shape: const CircularNotchedRectangle(),
           notchMargin: 10,
           child: Container(
@@ -95,41 +99,6 @@ class _MenuState extends State<Menu> {
                   ),
                 ]),
           ),
-        )
-
-        // BottomNavigationBar(
-        //   items: const <BottomNavigationBarItem>[
-        //     BottomNavigationBarItem(
-        //       activeIcon: SizedBox(
-        //           width: 24,
-        //           height: 18,
-        //           child: Image(image: AssetImage('assets/images/ic_movies.png'))),
-        //       icon: SizedBox(
-        //           width: 24,
-        //           height: 18,
-        //           child: Image(
-        //               image: AssetImage('assets/images/ic_movies_grey.png'))),
-        //       label: 'New Movies',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       activeIcon: SizedBox(
-        //           width: 24,
-        //           height: 18,
-        //           child:
-        //               Image(image: AssetImage('assets/images/ic_tickets.png'))),
-        //       icon: SizedBox(
-        //           width: 24,
-        //           height: 18,
-        //           child: Image(
-        //               image:
-        //                   AssetImage('assets/images/ic_movies_gray_ticket.png'))),
-        //       label: 'My Tickets',
-        //     ),
-        //   ],
-        //   currentIndex: _selectedIndex,
-        //   selectedItemColor: Color(0xff2C1F63),
-        //   onTap: _onItemTapped,
-        // ),
-        ));
+        )));
   }
 }

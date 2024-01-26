@@ -1,4 +1,5 @@
 import 'package:flutix/model/chair.dart';
+import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutix/ui/widgets/chair_tile.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutix/ui/widgets/header_content.dart';
@@ -61,6 +62,14 @@ class _ChooseRowState extends State<ChooseRow> {
               children: List.generate(
                   chair.length, (index) => ChairTile(chair: chair[index])),
             ),
+            const SizedBox(
+              height: 30,
+            ),
+            ButtonIcon(
+              onTap: () {
+                Navigator.pushNamed(context, '/checkoutMovie');
+              },
+            )
           ],
         ),
       ),

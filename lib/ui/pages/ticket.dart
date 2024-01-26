@@ -12,10 +12,14 @@ class Ticket extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: const Text('My Tickets'),
           backgroundColor: Color(0xff2C1F63),
+          foregroundColor: Colors.white,
           centerTitle: false,
           bottom: const TabBar(
+            labelColor: Colors.white,
+            indicatorColor: Colors.amber,
             tabs: <Widget>[
               Tab(
                 text: "Newest",
