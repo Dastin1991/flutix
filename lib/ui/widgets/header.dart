@@ -8,7 +8,7 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (Container(
+    return (SizedBox(
       height: 50,
       child: Row(
         children: [
@@ -20,7 +20,7 @@ class Header extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(left: 40),
             child: SizedBox(
-              width: 180,
+              width: 200,
               child: Align(
                 alignment: Alignment.center,
                 child: Text(

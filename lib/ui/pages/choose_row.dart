@@ -55,7 +55,12 @@ class _ChooseRowState extends State<ChooseRow> {
       body: SafeArea(
         child: Column(
           children: [
-            HeaderContent(title: ''),
+            HeaderContent(title: 'Avengers Infinity Wars'),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(16.0, 32.0, 16.0, 8.0),
+              child: Image(
+                  image: AssetImage('assets/images/ic_cinema_screen.png')),
+            ),
             Wrap(
               runSpacing: 15,
               spacing: 10,
@@ -64,6 +69,77 @@ class _ChooseRowState extends State<ChooseRow> {
             ),
             const SizedBox(
               height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Color(0xFFE4E4E4)),
+                          borderRadius: BorderRadius.circular(6)),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    const Text(
+                      "Available",
+                      style: TextStyle(
+                          fontFamily: 'Raleway', color: Color(0xFFADADAD)),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: Color(0xFFF6F6F6)),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    const Text(
+                      "Booked",
+                      style: TextStyle(
+                          fontFamily: 'Raleway', color: Color(0xFFADADAD)),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: Color(0xFFFFBD460)),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    const Text(
+                      "Selected",
+                      style: TextStyle(
+                          fontFamily: 'Raleway', color: Color(0xFFADADAD)),
+                    )
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 43,
             ),
             ButtonIcon(
               onTap: () {

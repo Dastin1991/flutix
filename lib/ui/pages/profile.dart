@@ -46,55 +46,64 @@ class Profile extends StatelessWidget {
                   height: 16,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      Row(
-                        children: const [
-                          Image(
-                            image: AssetImage('assets/images/ic_account.png'),
-                            height: 24,
-                            width: 24,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Edit Profile",
-                            style:
-                                TextStyle(fontFamily: 'Raleway', fontSize: 16),
-                          ),
-                        ],
+                      GestureDetector(
+                        onTap: (() {
+                          Navigator.pushNamed(context, '/changeProfile');
+                        }),
+                        child: Row(
+                          children: [
+                            Image(
+                              image: AssetImage('assets/images/ic_account.png'),
+                              height: 24,
+                              width: 24,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "Edit Profile",
+                              style: TextStyle(
+                                  fontFamily: 'Raleway', fontSize: 16),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 6,
                       ),
-                      const Separator(),
-                      Row(
-                        children: const [
-                          Image(
-                            image: AssetImage('assets/images/ic_account.png'),
-                            height: 24,
-                            width: 24,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "My Wallet",
-                            style:
-                                TextStyle(fontFamily: 'Raleway', fontSize: 16),
-                          ),
-                        ],
+                      Separator(),
+                      GestureDetector(
+                        onTap: (() =>
+                            Navigator.pushNamed(context, '/myWallet')),
+                        child: Row(
+                          children: [
+                            Image(
+                              image: AssetImage('assets/images/ic_wallet.png'),
+                              height: 24,
+                              width: 24,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "My Wallet",
+                              style: TextStyle(
+                                  fontFamily: 'Raleway', fontSize: 16),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 6,
                       ),
-                      const Separator(),
+                      Separator(),
                       Row(
-                        children: const [
+                        children: [
                           Image(
-                            image: AssetImage('assets/images/ic_account.png'),
+                            image: AssetImage('assets/images/ic_language.png'),
                             height: 24,
                             width: 24,
                           ),
@@ -108,11 +117,11 @@ class Profile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const Separator(),
+                      Separator(),
                       Row(
-                        children: const [
+                        children: [
                           Image(
-                            image: AssetImage('assets/images/ic_account.png'),
+                            image: AssetImage('assets/images/ic_help.png'),
                             height: 24,
                             width: 24,
                           ),
@@ -126,14 +135,14 @@ class Profile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 6,
                       ),
-                      const Separator(),
+                      Separator(),
                       Row(
-                        children: const [
+                        children: [
                           Image(
-                            image: AssetImage('assets/images/ic_account.png'),
+                            image: AssetImage('assets/images/ic_rate.png'),
                             height: 24,
                             width: 24,
                           ),
@@ -147,10 +156,10 @@ class Profile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 6,
                       ),
-                      const Separator(),
+                      Separator(),
                     ],
                   ),
                 )

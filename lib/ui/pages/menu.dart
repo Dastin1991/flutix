@@ -28,7 +28,9 @@ class _MenuState extends State<Menu> {
         floatingActionButton: ClipRRect(
           borderRadius: BorderRadius.circular(100),
           child: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/topup');
+            },
             backgroundColor: Colors.amber[500],
             child: const Icon(Icons.download),
           ),

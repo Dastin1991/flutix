@@ -18,11 +18,14 @@ class CheckoutMovie extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Image(
-                      image: AssetImage('assets/images/avengers.png'),
-                      width: 70,
-                      height: 90,
-                      fit: BoxFit.cover,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image(
+                        image: AssetImage('assets/images/avengers.png'),
+                        width: 70,
+                        height: 90,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 8.0),
