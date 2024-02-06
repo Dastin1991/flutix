@@ -1,9 +1,57 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutix/services/auth_services.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class SignUp extends StatelessWidget {
+class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
+
+  @override
+  State<SignUp> createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
+  final AuthServices _auth = AuthServices();
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _conpasswordController = TextEditingController();
+
+  bool _isButtonEnabled = false;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _usernameController.dispose();
+    _passwordController.dispose();
+    _conpasswordController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Add listeners to the text controllers
+    _usernameController.addListener(_validateInputs);
+    _emailController.addListener(_validateInputs);
+    _passwordController.addListener(_validateInputs);
+    _conpasswordController.addListener(_validateInputs);
+  }
+
+  void _validateInputs() {
+    // Update the state of the button based on the validation logic
+    setState(() {
+      _isButtonEnabled = _usernameController.text.isNotEmpty &&
+          _emailController.text.isNotEmpty &&
+          _passwordController.text.isNotEmpty &&
+          _conpasswordController.text.isNotEmpty &&
+          _passwordController.text == _conpasswordController.text;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,31 +94,35 @@ class SignUp extends StatelessWidget {
               const SizedBox(
                 height: 50,
               ),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: _usernameController,
+                decoration: const InputDecoration(
                     labelText: "Full Name", border: OutlineInputBorder()),
               ),
               const SizedBox(
                 height: 16,
               ),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(
                     labelText: "Email Address", border: OutlineInputBorder()),
               ),
               const SizedBox(
                 height: 16,
               ),
-              const TextField(
+              TextField(
+                controller: _passwordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     labelText: "Password", border: OutlineInputBorder()),
               ),
               const SizedBox(
                 height: 16,
               ),
-              const TextField(
+              TextField(
+                controller: _conpasswordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     labelText: "Confirm Password",
                     border: OutlineInputBorder()),
               ),
@@ -78,8 +130,9 @@ class SignUp extends StatelessWidget {
                 height: 30,
               ),
               ButtonIcon(
+                enabled: _isButtonEnabled,
                 onTap: () {
-                  Navigator.pushNamed(context, '/genre');
+                  _signUp();
                 },
               ),
             ],
@@ -88,4 +141,25 @@ class SignUp extends StatelessWidget {
       )),
     );
   }
+
+  void _signUp() async {
+    String username = _usernameController.text;
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    try {
+      User? user = await _auth.signUpWithEmailAndPassword(email, password);
+      if (user != null) {
+        print("User is successfully created");
+        Navigator.pushNamed(context, '/genre');
+      }
+    } catch (e) {
+      // print("Some error occured");
+      if (e is FirebaseAuthException) {
+        showToastMessage(e.code);
+      }
+    }
+  }
+
+  void showToastMessage(String message) => Fluttertoast.showToast(msg: message);
 }

@@ -3,11 +3,17 @@ import 'package:flutix/model/dates.dart';
 import 'package:flutix/ui/widgets/time_tile.dart';
 import 'package:flutter/material.dart';
 
-class CinemaTile extends StatelessWidget {
+class CinemaTile extends StatefulWidget {
   final Cinema cinemas;
 
   CinemaTile({Key? key, required this.cinemas}) : super(key: key);
 
+  @override
+  State<CinemaTile> createState() => _CinemaTileState();
+}
+
+class _CinemaTileState extends State<CinemaTile> {
+  List<String> selectedTime = <String>[];
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -17,10 +23,10 @@ class CinemaTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            cinemas.name,
+            widget.cinemas.name,
             style: const TextStyle(fontFamily: 'Raleway', fontSize: 20),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           SingleChildScrollView(
@@ -29,10 +35,10 @@ class CinemaTile extends StatelessWidget {
               spacing: 10,
               runSpacing: 10,
               children: List.generate(
-                  cinemas.times.length,
+                  widget.cinemas.times.length,
                   (index) => TimeTile(
-                      time: cinemas.times[index].time,
-                      selected: false,
+                      time: widget.cinemas.times[index].time,
+                      selected: true,
                       onTap: () {})),
             ),
           )

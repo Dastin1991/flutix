@@ -142,6 +142,7 @@ class _ChooseRowState extends State<ChooseRow> {
               height: 43,
             ),
             ButtonIcon(
+              enabled: false,
               onTap: () {
                 Navigator.pushNamed(context, '/checkoutMovie');
               },

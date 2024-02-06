@@ -6,6 +6,7 @@ import 'package:flutix/ui/widgets/lucky_day_card.dart';
 import 'package:flutix/ui/widgets/movie_card.dart';
 import 'package:flutix/ui/widgets/text_custom.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,6 +25,9 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> initPlatformState() async {
     // await StatusBarControl.setColor(Colors.green, animated: true);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.green,
+    ));
   }
 
   @override
@@ -36,8 +40,8 @@ class _HomePageState extends State<HomePage> {
           link: 'assets/images/avengers.png'),
       MoviePlaying(
           title: 'Fat Dragon',
-          rating: 7,
-          star: 3,
+          rating: 8,
+          star: 5,
           link: 'assets/images/deadpool.png'),
     ];
 
@@ -97,189 +101,188 @@ class _HomePageState extends State<HomePage> {
           description: 'Maximal only for two people',
           discount: 50),
     ];
-    return SafeArea(
-      child: (Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                height: 134,
-                decoration: const BoxDecoration(
-                    color: Color(0xff2C1F63),
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20))),
-                child: Container(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: SizedBox(
-                    height: 50,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          height: 64,
-                          width: 64,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/profile');
-                            },
-                            child: const CircleAvatar(
-                              backgroundImage:
-                                  AssetImage('assets/images/user_profile.jpeg'),
+    return (Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 30),
+              width: double.infinity,
+              height: 144,
+              decoration: const BoxDecoration(
+                  color: Color(0xff2C1F63),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20))),
+              child: Container(
+                padding: const EdgeInsets.only(left: 12),
+                child: SizedBox(
+                  height: 50,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        height: 64,
+                        width: 64,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/profile');
+                          },
+                          child: const CircleAvatar(
+                            backgroundImage:
+                                AssetImage('assets/images/user_profile.jpeg'),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "Dadang Setiyawan",
+                              style: TextStyle(
+                                  fontFamily: 'Raleway',
+                                  fontSize: 18,
+                                  color: Colors.white),
                             ),
-                          ),
+                            Text(
+                              "IDR 25.000",
+                              style: TextStyle(
+                                  fontFamily: 'Raleway',
+                                  fontSize: 18,
+                                  color: Color(0xFFFBD460)),
+                            ),
+                          ],
                         ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 12),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "Dadang Setiyawan",
-                                style: TextStyle(
-                                    fontFamily: 'Raleway',
-                                    fontSize: 18,
-                                    color: Colors.white),
-                              ),
-                              Text(
-                                "IDR 25.000",
-                                style: TextStyle(
-                                    fontFamily: 'Raleway',
-                                    fontSize: 18,
-                                    color: Color(0xFFFBD460)),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TextCustom(title: 'Now Playing'),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    SizedBox(
-                      height: 140,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Wrap(
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: List.generate(
-                              moviePlaying.length,
-                              (index) => MovieCard(
-                                    movie: moviePlaying[index],
-                                    onTap: () {
-                                      handlerClickMovie(
-                                          context, moviePlaying[index]);
-                                    },
-                                  )),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TextCustom(title: 'Browse Movie'),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: List.generate(
-                          category.length,
-                          (index) => CategoryCard(
-                                movie: category[index],
-                              )),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TextCustom(title: 'Coming Soon'),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    SingleChildScrollView(
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const TextCustom(title: 'Now Playing'),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  SizedBox(
+                    height: 140,
+                    child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Wrap(
                         spacing: 10,
                         runSpacing: 10,
                         children: List.generate(
-                            comingsoon.length,
-                            (index) => ComingsoonCard(
-                                  movie: comingsoon[index],
+                            moviePlaying.length,
+                            (index) => MovieCard(
+                                  movie: moviePlaying[index],
+                                  onTap: () {
+                                    handlerClickMovie(
+                                        context, moviePlaying[index]);
+                                  },
                                 )),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 30,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const TextCustom(title: 'Browse Movie'),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: List.generate(
+                        category.length,
+                        (index) => CategoryCard(
+                              movie: category[index],
+                            )),
+                  ),
+                ],
               ),
-              Container(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TextCustom(title: 'Get Lucky Day'),
-                    const SizedBox(
-                      height: 12,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const TextCustom(title: 'Coming Soon'),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: List.generate(
+                          comingsoon.length,
+                          (index) => ComingsoonCard(
+                                movie: comingsoon[index],
+                              )),
                     ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Wrap(
-                        alignment: WrapAlignment.start,
-                        runSpacing: 8,
-                        children: List.generate(
-                            luckyDay.length,
-                            (index) => LuckyDayCard(
-                                  luckyDay: luckyDay[index],
-                                )),
-                      ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const TextCustom(title: 'Get Lucky Day'),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Wrap(
+                      alignment: WrapAlignment.start,
+                      runSpacing: 8,
+                      children: List.generate(
+                          luckyDay.length,
+                          (index) => LuckyDayCard(
+                                luckyDay: luckyDay[index],
+                              )),
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
-      )),
-    );
+      ),
+    ));
   }
 }
 

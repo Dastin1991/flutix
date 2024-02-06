@@ -25,6 +25,7 @@ class MovieCard extends StatelessWidget {
                 ),
               )),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 height: 100,
@@ -39,15 +40,31 @@ class MovieCard extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              Container(
-                alignment: Alignment.bottomLeft,
-                padding: const EdgeInsets.only(bottom: 10, left: 16),
-                child: Text(
-                  movie.title,
-                  style: const TextStyle(
-                      color: Colors.white, fontFamily: 'Raleway', fontSize: 14),
-                ),
-              )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: Wrap(
+                      children: List.generate(
+                          5,
+                          (index) => Icon(
+                                Icons.star,
+                                color: index < movie.star
+                                    ? Colors.yellow
+                                    : Color(0xFFC4C4C4),
+                              )),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    '${movie.rating}/10',
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              ),
             ],
           )
         ],

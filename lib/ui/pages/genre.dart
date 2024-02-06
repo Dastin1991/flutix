@@ -110,6 +110,7 @@ class _GenreState extends State<Genre> {
                 height: 30,
               ),
               ButtonIcon(
+                enabled: false,
                 onTap: () {
                   Navigator.pushNamed(context, '/confirm');
                 },

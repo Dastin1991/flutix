@@ -50,13 +50,38 @@ class MovieDetail extends StatelessWidget {
                       ),
                     ),
                     const Center(
-                      child: const Text(
+                      child: Text(
                         "Action - English",
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontFamily: 'Raleway',
                             fontSize: 12,
                             color: Color(0xFFADADAD)),
                       ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Wrap(
+                            children: List.generate(
+                                5,
+                                (index) => Icon(
+                                      Icons.star,
+                                      color: index < movie!.star
+                                          ? Colors.yellow
+                                          : Color(0xFFC4C4C4),
+                                    )),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          '${movie.rating}/10',
+                          style: TextStyle(color: Color(0xFFC4C4C4)),
+                        )
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.all(24.0),

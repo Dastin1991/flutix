@@ -1,10 +1,48 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutix/services/auth_services.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
+
+  @override
+  State<SignIn> createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
+  final AuthServices _authServices = AuthServices();
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  bool _isButtonEnabled = false;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Add listeners to the text controllers
+    _emailController.addListener(_validateInputs);
+    _passwordController.addListener(_validateInputs);
+  }
+
+  void _validateInputs() {
+    // Update the state of the button based on the validation logic
+    setState(() {
+      _isButtonEnabled = _emailController.text.isNotEmpty &&
+          _passwordController.text.isNotEmpty;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,24 +86,29 @@ class SignIn extends StatelessWidget {
                     const SizedBox(
                       height: 50,
                     ),
-                    const TextField(
-                      decoration: InputDecoration(
+                    TextField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
                           labelText: "Email Address",
                           border: OutlineInputBorder()),
                     ),
                     const SizedBox(
                       height: 16,
                     ),
-                    const TextField(
+                    TextField(
+                      controller: _passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: "Password", border: OutlineInputBorder()),
                     ),
                     const SizedBox(
                       height: 30,
                     ),
                     ButtonIcon(
-                      onTap: () {},
+                      enabled: _isButtonEnabled,
+                      onTap: () {
+                        _signIn();
+                      },
                     ),
                     const SizedBox(
                       height: 100,
@@ -104,4 +147,29 @@ class SignIn extends StatelessWidget {
       )),
     );
   }
+
+  void _signIn() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    try {
+      User? user =
+          await _authServices.signInWithEmailAndPassword(email, password);
+      if (user != null) {
+        print(user.email);
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setString("email", user.email.toString());
+        pref.setBool("isLogin", true);
+        // print("Login successfully");
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      }
+    } catch (e) {
+      print("Some error occured" + e.toString());
+      if (e is FirebaseAuthException) {
+        showToastMessage(e.code);
+      }
+    }
+  }
+
+  void showToastMessage(String message) => Fluttertoast.showToast(msg: message);
 }

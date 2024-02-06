@@ -104,6 +104,7 @@ class _ChooseDateState extends State<ChooseDate> {
                 height: 30,
               ),
               ButtonIcon(
+                enabled: false,
                 onTap: () {
                   Navigator.pushNamed(context, '/chooseRow');
                 },

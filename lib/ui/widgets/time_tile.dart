@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 class TimeTile extends StatelessWidget {
   final String time;
+  final Function onTap;
   final bool selected;
-
-  VoidCallback onTap;
 
   TimeTile(
       {Key? key,
@@ -18,7 +17,7 @@ class TimeTile extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: onTap(),
       child: (Container(
         height: 50,
         width: 90,

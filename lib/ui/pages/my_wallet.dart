@@ -166,6 +166,9 @@ class MyWallet extends StatelessWidget {
                       transaction.length,
                       (index) => TransactionCard(
                             transactions: transaction[index],
+                            onTap: () {
+                              handlerClickTrans(context, transaction[index]);
+                            },
                           )),
                 ),
               ],
@@ -175,4 +178,8 @@ class MyWallet extends StatelessWidget {
       ),
     );
   }
+}
+
+void handlerClickTrans(BuildContext context, Transactions transactions) {
+  Navigator.pushNamed(context, '/ticketDetail', arguments: transactions);
 }
