@@ -35,9 +35,9 @@ class MovieDetail extends StatelessWidget {
                     SizedBox(
                         width: double.infinity,
                         height: 270,
-                        child: Image(
-                          image: AssetImage(movie.link),
-                          fit: BoxFit.cover,
+                        child: Image.network(
+                          movie.link,
+                          fit: BoxFit.fill,
                         )),
                     const SizedBox(
                       height: 16,
@@ -143,7 +143,8 @@ class MovieDetail extends StatelessWidget {
                                   backgroundColor: const Color(0xff503E9D),
                                   foregroundColor: Colors.white),
                               onPressed: () {
-                                Navigator.pushNamed(context, '/chooseDate');
+                                Navigator.pushNamed(context, '/chooseDate',
+                                    arguments: movie);
                               },
                               child: const Text("Continue to Book"))),
                     ),

@@ -1,9 +1,48 @@
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutix/ui/widgets/separator.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  String fullname = "";
+  String email = "";
+  String balance = "0";
+  @override
+  void initState() {
+    super.initState();
+    checkSharedPreferences();
+  }
+
+  Future<void> checkSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String? _email = prefs.getString('email');
+    String? _fullname = prefs.getString('fullname');
+
+    setState(() {
+      email = _email!;
+      fullname = _fullname!;
+    });
+  }
+
+  Future<void> logout(BuildContext context) async {
+    // Get an instance of SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Set isLogin to false
+    await prefs.setBool('isLogin', false);
+    await prefs.setString('email', "");
+
+    // Navigate to the desired screen
+    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +67,16 @@ class Profile extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                const Text(
-                  "Dadang Setiyawan",
-                  style: TextStyle(fontFamily: 'Raleway', fontSize: 18),
+                Text(
+                  fullname,
+                  style: const TextStyle(fontFamily: 'Raleway', fontSize: 18),
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                const Text(
-                  "dadangsetiyawan20@gmail.com",
-                  style: TextStyle(
+                Text(
+                  email,
+                  style: const TextStyle(
                       fontFamily: 'Raleway',
                       fontSize: 16,
                       color: Color(0xFFADADAD)),
@@ -46,14 +85,14 @@ class Profile extends StatelessWidget {
                   height: 16,
                 ),
                 Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
                       GestureDetector(
                         onTap: (() {
                           Navigator.pushNamed(context, '/changeProfile');
                         }),
-                        child: Row(
+                        child: const Row(
                           children: [
                             Image(
                               image: AssetImage('assets/images/ic_account.png'),
@@ -71,14 +110,14 @@ class Profile extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 6,
                       ),
-                      Separator(),
+                      const Separator(),
                       GestureDetector(
                         onTap: (() =>
                             Navigator.pushNamed(context, '/myWallet')),
-                        child: Row(
+                        child: const Row(
                           children: [
                             Image(
                               image: AssetImage('assets/images/ic_wallet.png'),
@@ -96,11 +135,11 @@ class Profile extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 6,
                       ),
-                      Separator(),
-                      Row(
+                      const Separator(),
+                      const Row(
                         children: [
                           Image(
                             image: AssetImage('assets/images/ic_language.png'),
@@ -117,8 +156,8 @@ class Profile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Separator(),
-                      Row(
+                      const Separator(),
+                      const Row(
                         children: [
                           Image(
                             image: AssetImage('assets/images/ic_help.png'),
@@ -135,11 +174,11 @@ class Profile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 6,
                       ),
-                      Separator(),
-                      Row(
+                      const Separator(),
+                      const Row(
                         children: [
                           Image(
                             image: AssetImage('assets/images/ic_rate.png'),
@@ -156,10 +195,22 @@ class Profile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 6,
                       ),
-                      Separator(),
+                      const Separator(),
+                      GestureDetector(
+                        onTap: () async {
+                          await logout(context);
+                        },
+                        child: const Text(
+                          "Logout",
+                          style: TextStyle(
+                              color: Colors.redAccent,
+                              fontSize: 16,
+                              fontFamily: 'Raleway'),
+                        ),
+                      )
                     ],
                   ),
                 )

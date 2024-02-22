@@ -21,9 +21,11 @@ class _InitState extends State<Init> {
   Future<void> checkSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    bool isLogin = prefs.containsKey('isLogin');
-
-    if (isLogin) {
+    bool? isLogin = prefs.getBool('isLogin');
+    String? email = prefs.getString('email');
+    String? fullname = prefs.getString('fullname');
+    print(fullname);
+    if (isLogin != null && isLogin) {
       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
     } else {
       Navigator.pushNamedAndRemoveUntil(

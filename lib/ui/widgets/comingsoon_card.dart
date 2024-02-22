@@ -12,7 +12,9 @@ class ComingsoonCard extends StatelessWidget {
         SizedBox(
           width: 100,
           height: 140,
-          child: Image.asset(movie.link),
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(movie.link)),
         ),
       ],
     ));

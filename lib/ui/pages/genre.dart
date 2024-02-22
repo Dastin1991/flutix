@@ -110,7 +110,9 @@ class _GenreState extends State<Genre> {
                 height: 30,
               ),
               ButtonIcon(
-                enabled: false,
+                enabled: selectedGenre.isNotEmpty && selectedMovie.isNotEmpty
+                    ? true
+                    : false,
                 onTap: () {
                   Navigator.pushNamed(context, '/confirm');
                 },

@@ -1,8 +1,33 @@
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ConfirmAccount extends StatelessWidget {
+class ConfirmAccount extends StatefulWidget {
   const ConfirmAccount({Key? key}) : super(key: key);
+
+  @override
+  State<ConfirmAccount> createState() => _ConfirmAccountState();
+}
+
+class _ConfirmAccountState extends State<ConfirmAccount> {
+  String fullname = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    checkSharedPreferences();
+    super.initState();
+  }
+
+  Future<void> checkSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String? fullname = prefs.getString('fullname');
+
+    setState(() {
+      fullname;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +69,9 @@ class ConfirmAccount extends StatelessWidget {
                       const SizedBox(
                         height: 6,
                       ),
-                      const Text(
-                        "Dadang Setiyawan",
-                        style: TextStyle(
+                      Text(
+                        fullname,
+                        style: const TextStyle(
                             fontFamily: 'Raleway',
                             fontSize: 20,
                             fontWeight: FontWeight.w500),

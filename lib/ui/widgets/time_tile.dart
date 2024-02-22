@@ -17,7 +17,9 @@ class TimeTile extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
 
     return GestureDetector(
-      onTap: onTap(),
+      onTap: () {
+        onTap();
+      },
       child: (Container(
         height: 50,
         width: 90,

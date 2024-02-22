@@ -1,12 +1,21 @@
 import 'package:flutix/model/cinema.dart';
+import 'package:flutix/model/cinema_time.dart';
 import 'package:flutix/model/dates.dart';
 import 'package:flutix/ui/widgets/time_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CinemaTile extends StatefulWidget {
   final Cinema cinemas;
+  final CinemaTime cinemaTime;
+  final Function onTap;
 
-  CinemaTile({Key? key, required this.cinemas}) : super(key: key);
+  CinemaTile(
+      {Key? key,
+      required this.cinemas,
+      required this.onTap,
+      required this.cinemaTime})
+      : super(key: key);
 
   @override
   State<CinemaTile> createState() => _CinemaTileState();
@@ -14,6 +23,15 @@ class CinemaTile extends StatefulWidget {
 
 class _CinemaTileState extends State<CinemaTile> {
   List<String> selectedTime = <String>[];
+  // late int _receivedParam;
+  // late int selectedTimeId; // Track the selected time ID
+
+  @override
+  void initState() {
+    super.initState();
+    // selectedTimeId = widget.timeId; // Initialize selected time ID
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -38,12 +56,19 @@ class _CinemaTileState extends State<CinemaTile> {
                   widget.cinemas.times.length,
                   (index) => TimeTile(
                       time: widget.cinemas.times[index].time,
-                      selected: true,
-                      onTap: () {})),
+                      selected: widget.cinemaTime == widget.cinemas.times[index]
+                          ? true
+                          : false,
+                      onTap: () =>
+                          _onSelectedTime(widget.cinemas.times[index]))),
             ),
           )
         ],
       ),
     );
+  }
+
+  void _onSelectedTime(CinemaTime cinemaTime) async {
+    widget.onTap(cinemaTime);
   }
 }

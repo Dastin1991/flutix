@@ -4,7 +4,8 @@ import 'package:flutter/src/widgets/framework.dart';
 
 class HeaderContent extends StatelessWidget {
   final String title;
-  HeaderContent({required this.title});
+  final String link;
+  HeaderContent({required this.title, required this.link});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class HeaderContent extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image(
-                    image: AssetImage('assets/images/avengers.png'),
+                    image: AssetImage(link),
                     width: 60,
                     height: 60,
                     fit: BoxFit.cover,

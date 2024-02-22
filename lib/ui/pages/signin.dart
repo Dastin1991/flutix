@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutix/services/auth_services.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
@@ -148,6 +149,25 @@ class _SignInState extends State<SignIn> {
     );
   }
 
+  Future<DocumentSnapshot> getUserByEmail(String email) async {
+    // Reference to the "users" collection in Firestore
+    final CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
+
+    // Query for the user document with the provided email
+    QuerySnapshot querySnapshot =
+        await usersCollection.where('email', isEqualTo: email).get();
+
+    // Check if the query returned any documents
+    if (querySnapshot.docs.isNotEmpty) {
+      // Return the first document found (assuming email is unique)
+      return querySnapshot.docs.first;
+    } else {
+      // Handle the case where no user with the provided email was found
+      throw Exception('User not found for email: $email');
+    }
+  }
+
   void _signIn() async {
     String email = _emailController.text;
     String password = _passwordController.text;
@@ -156,10 +176,22 @@ class _SignInState extends State<SignIn> {
       User? user =
           await _authServices.signInWithEmailAndPassword(email, password);
       if (user != null) {
-        print(user.email);
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString("email", user.email.toString());
+
         pref.setBool("isLogin", true);
+
+        DocumentSnapshot userSnapshot = await getUserByEmail(email!);
+
+        if (userSnapshot.exists) {
+          // User data found, you can access it using userSnapshot.data()
+          Map<String, dynamic> userData =
+              userSnapshot.data() as Map<String, dynamic>;
+          String userFullname = userData['fullname'];
+          pref.setString("fullname", userFullname);
+        } else {
+          print('User not found for email: $email');
+        }
         // print("Login successfully");
         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       }

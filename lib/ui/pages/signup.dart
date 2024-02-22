@@ -4,6 +4,8 @@ import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -21,6 +23,8 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _conpasswordController = TextEditingController();
 
   bool _isButtonEnabled = false;
+
+  // User _user;
 
   @override
   void dispose() {
@@ -142,19 +146,32 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  void _signUp() async {
+  Future _signUp() async {
     String username = _usernameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
 
+    print(email);
+    print(username);
+
+    // print('add users');
     try {
       User? user = await _auth.signUpWithEmailAndPassword(email, password);
       if (user != null) {
-        print("User is successfully created");
+        final firestore = FirebaseFirestore.instance;
+
+        CollectionReference users = firestore.collection("users");
+        users
+            .add({
+              'fullname': username, // John Doe
+              'email': email, // John Doe
+            })
+            .then((value) => print("User Added"))
+            .catchError((error) => print("Failed to add user: $error"));
         Navigator.pushNamed(context, '/genre');
       }
     } catch (e) {
-      // print("Some error occured");
+      print("Some error occured");
       if (e is FirebaseAuthException) {
         showToastMessage(e.code);
       }
