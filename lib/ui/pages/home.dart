@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   var jsonList;
   String fullname = "";
   String balance = "0";
+
   @override
   void initState() {
     super.initState();
@@ -62,7 +63,10 @@ class _HomePageState extends State<HomePage> {
     String? email = prefs.getString('email');
     String? _fullname = prefs.getString('fullname');
 
-    print(email);
+    setState(() {
+      fullname =
+          _fullname!; // Update the state variable with the retrieved fullname
+    });
 
     DocumentSnapshot userSnapshot = await getUserByEmail(email!);
 

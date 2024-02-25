@@ -22,10 +22,9 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
   Future<void> checkSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String? fullname = prefs.getString('fullname');
-
+    String? _fullname = prefs.getString('fullname');
     setState(() {
-      fullname;
+      fullname = _fullname!;
     });
   }
 
@@ -89,7 +88,8 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                             backgroundColor: Color(0xff3E9D9D),
                             foregroundColor: Colors.white),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/home');
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/home', (route) => false);
                         },
                         child: const Text(
                           "Create My Account",

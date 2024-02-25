@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -146,29 +147,67 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
+  Future<DocumentSnapshot> getUserByEmail(String email) async {
+    // Reference to the "users" collection in Firestore
+    final CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
+
+    // Query for the user document with the provided email
+    QuerySnapshot querySnapshot =
+        await usersCollection.where('email', isEqualTo: email).get();
+
+    // Check if the query returned any documents
+    if (querySnapshot.docs.isNotEmpty) {
+      // Return the first document found (assuming email is unique)
+      return querySnapshot.docs.first;
+    } else {
+      // Handle the case where no user with the provided email was found
+      throw Exception('User not found for email: $email');
+    }
+  }
+
   Future _signUp() async {
     String username = _usernameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
-
-    print(email);
-    print(username);
-
-    // print('add users');
+    String userId = "";
     try {
-      User? user = await _auth.signUpWithEmailAndPassword(email, password);
-      if (user != null) {
+      User? newUser = await _auth.signUpWithEmailAndPassword(email, password);
+      if (newUser != null) {
+        final userId = newUser.uid;
         final firestore = FirebaseFirestore.instance;
 
         CollectionReference users = firestore.collection("users");
         users
-            .add({
+            .doc(userId)
+            .set({
               'fullname': username, // John Doe
               'email': email, // John Doe
             })
             .then((value) => print("User Added"))
             .catchError((error) => print("Failed to add user: $error"));
-        Navigator.pushNamed(context, '/genre');
+
+        User? user = await _auth.signInWithEmailAndPassword(email, password);
+        if (user != null) {
+          SharedPreferences pref = await SharedPreferences.getInstance();
+          pref.setString("email", user.email.toString());
+
+          pref.setBool("isLogin", true);
+
+          DocumentSnapshot userSnapshot = await getUserByEmail(email);
+
+          if (userSnapshot.exists) {
+            // User data found, you can access it using userSnapshot.data()
+            Map<String, dynamic> userData =
+                userSnapshot.data() as Map<String, dynamic>;
+            String userFullname = userData['fullname'];
+            pref.setString("fullname", userFullname);
+          } else {
+            print('User not found for email: $email');
+          }
+          // print("Login successfully");
+          Navigator.pushNamed(context, '/genre');
+        }
       }
     } catch (e) {
       print("Some error occured");
