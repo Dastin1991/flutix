@@ -1,10 +1,12 @@
+import 'package:flutix/model/user.dart';
 import 'package:flutix/ui/widgets/genre_tile.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutter/material.dart';
 
 class Genre extends StatefulWidget {
-  const Genre({Key? key}) : super(key: key);
+  UserProfile? users;
+  Genre({Key? key, this.users});
 
   @override
   State<Genre> createState() => _GenreState();
@@ -32,6 +34,11 @@ class _GenreState extends State<Genre> {
 
   @override
   Widget build(BuildContext context) {
+    final arg = ModalRoute.of(context)!.settings.arguments;
+    UserProfile? userProfile;
+    if (arg is UserProfile) {
+      userProfile = arg;
+    }
     return SafeArea(
       child: (Scaffold(
         body: Container(
@@ -114,7 +121,22 @@ class _GenreState extends State<Genre> {
                     ? true
                     : false,
                 onTap: () {
-                  Navigator.pushNamed(context, '/confirm');
+                  List<String> selectedGenres = selectedGenre
+                      .map((index) => myGenre[int.parse(index)])
+                      .toList();
+                  List<String> selectedMovies = selectedMovie
+                      .map((index) => myMovie[int.parse(index)])
+                      .toList();
+                  print(selectedGenres);
+                  UserProfile users = UserProfile(
+                      fullname: userProfile!.fullname,
+                      email: userProfile!.email,
+                      pathImage:
+                          userProfile?.pathImage ?? userProfile.pathImage,
+                      password: userProfile.password,
+                      genre: selectedGenres.join(','),
+                      language: selectedMovies.join(','));
+                  Navigator.pushNamed(context, '/confirm', arguments: users);
                 },
               )
             ],

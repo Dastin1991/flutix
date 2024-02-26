@@ -77,7 +77,9 @@ class _HomePageState extends State<HomePage> {
       Map<String, dynamic> userData =
           userSnapshot.data() as Map<String, dynamic>;
       String userFullname = userData['fullname'];
-      String userProfile = userData['profileImageUrl'];
+      String userProfile = userData.containsKey('profileImageUrl')
+          ? userData['profileImageUrl']
+          : '';
 
       //get saldo balance
       CollectionReference ewalletCollection =
@@ -186,7 +188,9 @@ class _HomePageState extends State<HomePage> {
                                 ? CircleAvatar(
                                     backgroundImage: NetworkImage(profile_url),
                                   )
-                                : Container(),
+                                : CircleAvatar(
+                                    backgroundImage: AssetImage(
+                                        'assets/images/user_pic.png')),
                           ),
                         ),
                         Container(

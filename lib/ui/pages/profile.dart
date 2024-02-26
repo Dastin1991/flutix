@@ -68,7 +68,10 @@ class _ProfileState extends State<Profile> {
                           width: 120,
                           fit: BoxFit.cover,
                         )
-                      : Container(),
+                      : CircleAvatar(
+                          radius: 50,
+                          backgroundImage:
+                              AssetImage('assets/images/user_pic.png')),
                 ),
                 const SizedBox(
                   height: 8,

@@ -1,7 +1,20 @@
-class User {
+import 'dart:io';
+
+class UserProfile {
   String fullname;
   String email;
-  String photo;
+  String? password;
+  String? photo;
+  String? genre;
+  String? language;
+  File? pathImage;
 
-  User({required this.fullname, required this.email, required this.photo});
+  UserProfile(
+      {required this.fullname,
+      required this.email,
+      this.password,
+      this.photo,
+      this.genre,
+      this.language,
+      this.pathImage});
 }
