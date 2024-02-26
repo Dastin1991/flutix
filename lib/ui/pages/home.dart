@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   var jsonList;
   String fullname = "";
   String balance = "0";
+  String profile_url = "";
 
   @override
   void initState() {
@@ -62,6 +63,7 @@ class _HomePageState extends State<HomePage> {
 
     String? email = prefs.getString('email');
     String? _fullname = prefs.getString('fullname');
+    // String? _profile_url = prefs.getString('profile_url');
 
     setState(() {
       fullname =
@@ -72,9 +74,10 @@ class _HomePageState extends State<HomePage> {
 
     if (userSnapshot.exists) {
       // User data found, you can access it using userSnapshot.data()
-      // Map<String, dynamic> userData =
-      //     userSnapshot.data() as Map<String, dynamic>;
-      // String userFullname = userData['fullname'];
+      Map<String, dynamic> userData =
+          userSnapshot.data() as Map<String, dynamic>;
+      String userFullname = userData['fullname'];
+      String userProfile = userData['profileImageUrl'];
 
       //get saldo balance
       CollectionReference ewalletCollection =
@@ -91,11 +94,14 @@ class _HomePageState extends State<HomePage> {
         int userBalance = ewalletData['balance'];
 
         setState(() {
-          balance = RupiahFormatter.format(userBalance)
+          balance = Utils.format(userBalance)
               .toString(); // Update the state variable with the retrieved balance
-          fullname =
-              _fullname!; // Update the state variable with the retrieved fullname
+          fullname = _fullname!;
+          profile_url =
+              userProfile; // Update the state variable with the retrieved fullname
         });
+
+        await prefs.setString('profileUrl', userProfile);
       } else {
         print('No ewallet document found for user with email: $email');
       }
@@ -113,42 +119,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // List<MoviePlaying> moviePlaying = [
-    //   MoviePlaying(
-    //       title: 'Avengers',
-    //       rating: 7,
-    //       star: 4,
-    //       link: 'assets/images/avengers.png'),
-    //   MoviePlaying(
-    //       title: 'Fat Dragon',
-    //       rating: 8,
-    //       star: 5,
-    //       link: 'assets/images/deadpool.png'),
-    // ];
-
-    List<MoviePlaying> comingsoon = [
-      MoviePlaying(
-          title: 'Avengers',
-          rating: 7,
-          star: 4,
-          link: 'assets/images/pikachu.png'),
-      MoviePlaying(
-          title: 'Fat Dragon',
-          rating: 7,
-          star: 3,
-          link: 'assets/images/spiderman.png'),
-      MoviePlaying(
-          title: 'Avengers',
-          rating: 7,
-          star: 4,
-          link: 'assets/images/pikachu.png'),
-      MoviePlaying(
-          title: 'Fat Dragon',
-          rating: 7,
-          star: 3,
-          link: 'assets/images/spiderman.png'),
-    ];
-
     List<MoviePlaying> category = [
       MoviePlaying(
           title: 'Action',
@@ -212,10 +182,11 @@ class _HomePageState extends State<HomePage> {
                             onTap: () {
                               Navigator.pushNamed(context, '/profile');
                             },
-                            child: const CircleAvatar(
-                              backgroundImage:
-                                  AssetImage('assets/images/user_profile.jpeg'),
-                            ),
+                            child: profile_url.isNotEmpty
+                                ? CircleAvatar(
+                                    backgroundImage: NetworkImage(profile_url),
+                                  )
+                                : Container(),
                           ),
                         ),
                         Container(

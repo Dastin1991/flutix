@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutix/services/utils.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,12 +20,13 @@ class ChangeProfile extends StatefulWidget {
 
 class _ChangeProfileState extends State<ChangeProfile> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  late File _image;
+  File? _image;
   final picker = ImagePicker();
   String _imageUrl = '';
 
   String? fullname = "";
   String? email = "";
+  String? profileUrl = "";
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _fullnameController = TextEditingController();
@@ -73,7 +76,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
               .child('user_profile_images')
               .child('${DateTime.now()}.jpg');
 
-          firebase_storage.UploadTask uploadTask = ref.putFile(_image);
+          firebase_storage.UploadTask uploadTask = ref.putFile(_image!);
           await uploadTask.whenComplete(() async {
             _imageUrl = await ref.getDownloadURL();
             print('Image uploaded to Firebase Storage: $_imageUrl');
@@ -84,6 +87,10 @@ class _ChangeProfileState extends State<ChangeProfile> {
             });
           });
         }
+
+        showToastMessage('Profile berhasil diupdate!');
+
+        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
       } else {
         print('No user signed in');
       }
@@ -98,11 +105,14 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
     fullname = await prefs.getString('fullname');
     email = await prefs.getString('email');
+    String? _profileUrl = await prefs.getString('profileUrl');
 
     _fullnameController.text = fullname!;
     _emailController.text = email!;
 
-    print("$fullname - $email");
+    setState(() {
+      profileUrl = _profileUrl;
+    });
   }
 
   //Image Picker function to get image from gallery
@@ -175,18 +185,24 @@ class _ChangeProfileState extends State<ChangeProfile> {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    child: _image == null
-                        ? const CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/images/user_pic.png'),
+                    child: profileUrl!.isNotEmpty && _image == null
+                        ? CircleAvatar(
+                            backgroundImage: NetworkImage(profileUrl!),
                             radius: 60,
                             foregroundColor: Colors.black,
                           )
-                        : CircleAvatar(
-                            backgroundImage: FileImage(_image!),
-                            radius: 60,
-                            foregroundColor: Colors.black,
-                          ),
+                        : _image != null
+                            ? CircleAvatar(
+                                backgroundImage: FileImage(_image!),
+                                radius: 60,
+                                foregroundColor: Colors.black,
+                              )
+                            : const CircleAvatar(
+                                backgroundImage:
+                                    AssetImage('assets/images/user_pic.png'),
+                                radius: 60,
+                                foregroundColor: Colors.black,
+                              ),
                   ),
                   Container(
                     alignment: Alignment.bottomCenter,
@@ -202,11 +218,6 @@ class _ChangeProfileState extends State<ChangeProfile> {
                   )
                 ],
               ),
-              // Center(
-              //   child: _image == null
-              //       ? Text('No Image selected')
-              //       : Image.file(_image!),
-              // ),
               const SizedBox(
                 height: 50,
               ),
@@ -269,3 +280,5 @@ class _ChangeProfileState extends State<ChangeProfile> {
     ));
   }
 }
+
+void showToastMessage(String message) => Fluttertoast.showToast(msg: message);

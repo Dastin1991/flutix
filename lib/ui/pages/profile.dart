@@ -13,6 +13,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   String fullname = "";
   String email = "";
+  String profileUrl = "";
   String balance = "0";
   @override
   void initState() {
@@ -25,10 +26,12 @@ class _ProfileState extends State<Profile> {
 
     String? _email = prefs.getString('email');
     String? _fullname = prefs.getString('fullname');
+    String? _profileUrl = prefs.getString('profileUrl');
 
     setState(() {
       email = _email!;
       fullname = _fullname!;
+      profileUrl = _profileUrl!;
     });
   }
 
@@ -58,11 +61,14 @@ class _ProfileState extends State<Profile> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(100),
-                  child: const Image(
-                    image: AssetImage('assets/images/user_profile.jpeg'),
-                    height: 120,
-                    width: 120,
-                  ),
+                  child: profileUrl.isNotEmpty
+                      ? Image(
+                          image: NetworkImage(profileUrl),
+                          height: 120,
+                          width: 120,
+                          fit: BoxFit.cover,
+                        )
+                      : Container(),
                 ),
                 const SizedBox(
                   height: 8,

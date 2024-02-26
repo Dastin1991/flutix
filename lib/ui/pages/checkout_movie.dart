@@ -140,7 +140,7 @@ class CheckoutMovie extends StatelessWidget {
                                 fontFamily: 'Raleway',
                                 color: Color(0xFFADADAD)),
                           ),
-                          Text(RupiahFormatter.format(
+                          Text(Utils.format(
                               int.parse(cinemaTicket.total.toString())))
                         ],
                       ),
@@ -163,7 +163,7 @@ class CheckoutMovie extends StatelessWidget {
                                 color: Color(0xFFADADAD)),
                           ),
                           Text(
-                            RupiahFormatter.format(5000000),
+                            Utils.format(5000000),
                             style: const TextStyle(
                                 fontFamily: 'Raleway',
                                 color: Color(0xFF3E9D9D)),

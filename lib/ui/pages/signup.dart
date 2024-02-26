@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutix/services/auth_services.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutix/ui/widgets/header.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -17,6 +22,10 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final AuthServices _auth = AuthServices();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  File? _image;
+  final picker = ImagePicker();
+  String _imageUrl = '';
 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -78,18 +87,27 @@ class _SignUpState extends State<SignUp> {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    child: const CircleAvatar(
-                      backgroundImage: AssetImage('assets/images/user_pic.png'),
-                      radius: 60,
-                      foregroundColor: Colors.black,
-                    ),
+                    child: _image == null
+                        ? const CircleAvatar(
+                            backgroundImage:
+                                AssetImage('assets/images/user_pic.png'),
+                            radius: 60,
+                            foregroundColor: Colors.black,
+                          )
+                        : CircleAvatar(
+                            backgroundImage: FileImage(_image!),
+                            radius: 60,
+                            foregroundColor: Colors.black,
+                          ),
                   ),
                   Container(
                     alignment: Alignment.bottomCenter,
                     padding: const EdgeInsets.only(top: 90),
                     child: IconButton(
                       splashRadius: 28,
-                      onPressed: () {},
+                      onPressed: () {
+                        showOptions();
+                      },
                       icon: Image.asset('assets/images/btn_add_photo.png'),
                       iconSize: 42,
                     ),
@@ -184,8 +202,35 @@ class _SignUpState extends State<SignUp> {
               'fullname': username, // John Doe
               'email': email, // John Doe
             })
-            .then((value) => print("User Added"))
+            .then((value) => {
+                  users.doc(userId).collection('ewallet').add({
+                    'balance': 0,
+                  }).then((_) {
+                    print("User and wallet added successfully");
+                  }).catchError((error) {
+                    print("Failed to add wallet: $error");
+                  })
+                })
             .catchError((error) => print("Failed to add user: $error"));
+
+        if (_image != null) {
+          firebase_storage.Reference ref = firebase_storage
+              .FirebaseStorage.instance
+              .ref()
+              .child('user_profile_images')
+              .child('${DateTime.now()}.jpg');
+
+          firebase_storage.UploadTask uploadTask = ref.putFile(_image!);
+          await uploadTask.whenComplete(() async {
+            _imageUrl = await ref.getDownloadURL();
+            print('Image uploaded to Firebase Storage: $_imageUrl');
+
+            // Save image URL to Firestore
+            await _firestore.collection('users').doc(userId).update({
+              'profileImageUrl': _imageUrl,
+            });
+          });
+        }
 
         User? user = await _auth.signInWithEmailAndPassword(email, password);
         if (user != null) {
@@ -215,6 +260,56 @@ class _SignUpState extends State<SignUp> {
         showToastMessage(e.code);
       }
     }
+  }
+
+  //Image Picker function to get image from gallery
+  Future getImageFromGallery() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      }
+    });
+  }
+
+  //Image Picker function to get image from camera
+  Future getImageFromCamera() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      }
+    });
+  }
+
+  //Show options to get image from camera or gallery
+  Future showOptions() async {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        actions: [
+          CupertinoActionSheetAction(
+            child: Text('Photo Gallery'),
+            onPressed: () {
+              // close the options modal
+              Navigator.of(context).pop();
+              // get image from gallery
+              getImageFromGallery();
+            },
+          ),
+          CupertinoActionSheetAction(
+            child: Text('Camera'),
+            onPressed: () {
+              // close the options modal
+              Navigator.of(context).pop();
+              // get image from camera
+              getImageFromCamera();
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   void showToastMessage(String message) => Fluttertoast.showToast(msg: message);
