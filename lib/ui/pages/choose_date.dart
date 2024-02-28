@@ -3,6 +3,7 @@ import 'package:flutix/model/cinema_ticket.dart';
 import 'package:flutix/model/cinema_time.dart';
 import 'package:flutix/model/dates.dart';
 import 'package:flutix/model/movie_playing.dart';
+import 'package:flutix/services/utils.dart';
 import 'package:flutix/ui/widgets/cinema_tile.dart';
 import 'package:flutix/ui/widgets/dates_tile.dart';
 import 'package:flutix/ui/widgets/genre_tile.dart';
@@ -19,33 +20,68 @@ class ChooseDate extends StatefulWidget {
 }
 
 class _ChooseDateState extends State<ChooseDate> {
-  List<Dates> dates = [
-    Dates(date: '21', day: 'SAT'),
-    Dates(date: '22', day: 'SUN'),
-    Dates(date: '23', day: 'MON'),
-    Dates(date: '24', day: 'TUE'),
-    Dates(date: '25', day: 'WED'),
-  ];
+  // List<Dates> dates = [
+  //   Dates(date: '21', day: 'SAT'),
+  //   Dates(date: '22', day: 'SUN'),
+  //   Dates(date: '23', day: 'MON'),
+  //   Dates(date: '24', day: 'TUE'),
+  //   Dates(date: '25', day: 'WED'),
+  // ];
+
+  List<Dates> dates = Utils.generateDatesForWeek(DateTime.now());
 
   List<Cinema> cinemas = [
     Cinema(name: "Paris Van Java", times: [
       CinemaTime(id: 1, cinemaName: "Paris Van Java", time: "12:20"),
-      CinemaTime(id: 2, cinemaName: "Paris Van Java", time: "18:20"),
-      CinemaTime(id: 3, cinemaName: "Paris Van Java", time: "15:40"),
-      CinemaTime(id: 4, cinemaName: "Paris Van Java", time: "20:20"),
-      CinemaTime(id: 5, cinemaName: "Paris Van Java", time: "23:20"),
+      CinemaTime(id: 2, cinemaName: "Paris Van Java", time: "12:50"),
+      CinemaTime(id: 3, cinemaName: "Paris Van Java", time: "14:25"),
+      CinemaTime(id: 4, cinemaName: "Paris Van Java", time: "14:55"),
+      CinemaTime(id: 5, cinemaName: "Paris Van Java", time: "16:30"),
+      CinemaTime(id: 6, cinemaName: "Paris Van Java", time: "17:00"),
+      CinemaTime(id: 7, cinemaName: "Paris Van Java", time: "18:35"),
+      CinemaTime(id: 8, cinemaName: "Paris Van Java", time: "19:05"),
+      CinemaTime(id: 9, cinemaName: "Paris Van Java", time: "20:40"),
+      CinemaTime(id: 10, cinemaName: "Paris Van Java", time: "21:10"),
     ]),
     Cinema(name: "Cihampelas Walk", times: [
-      CinemaTime(id: 6, cinemaName: "Cihampelas Walk", time: "10:00")
+      CinemaTime(id: 11, cinemaName: "Cihampelas Walk", time: "12:20"),
+      CinemaTime(id: 12, cinemaName: "Cihampelas Walk", time: "12:50"),
+      CinemaTime(id: 13, cinemaName: "Cihampelas Walk", time: "14:25"),
+      CinemaTime(id: 14, cinemaName: "Cihampelas Walk", time: "14:55"),
+      CinemaTime(id: 15, cinemaName: "Cihampelas Walk", time: "16:30"),
+      CinemaTime(id: 16, cinemaName: "Cihampelas Walk", time: "17:00"),
+      CinemaTime(id: 17, cinemaName: "Cihampelas Walk", time: "18:35"),
+      CinemaTime(id: 18, cinemaName: "Cihampelas Walk", time: "19:05"),
+      CinemaTime(id: 19, cinemaName: "Cihampelas Walk", time: "20:40"),
+      CinemaTime(id: 20, cinemaName: "Cihampelas Walk", time: "21:10"),
     ]),
     Cinema(name: "Bandung Elektronik Center", times: [
-      CinemaTime(id: 7, cinemaName: "Bandung Elektronik Center", time: "10:00")
+      CinemaTime(
+          id: 21, cinemaName: "Bandung Elektronik Center", time: "12:20"),
+      CinemaTime(
+          id: 22, cinemaName: "Bandung Elektronik Center", time: "12:50"),
+      CinemaTime(
+          id: 23, cinemaName: "Bandung Elektronik Center", time: "14:25"),
+      CinemaTime(
+          id: 24, cinemaName: "Bandung Elektronik Center", time: "14:55"),
+      CinemaTime(
+          id: 25, cinemaName: "Bandung Elektronik Center", time: "16:30"),
+      CinemaTime(
+          id: 26, cinemaName: "Bandung Elektronik Center", time: "17:00"),
+      CinemaTime(
+          id: 27, cinemaName: "Bandung Elektronik Center", time: "18:35"),
+      CinemaTime(
+          id: 28, cinemaName: "Bandung Elektronik Center", time: "19:05"),
+      CinemaTime(
+          id: 29, cinemaName: "Bandung Elektronik Center", time: "20:40"),
+      CinemaTime(
+          id: 30, cinemaName: "Bandung Elektronik Center", time: "21:10"),
     ]),
   ];
 
   List<String> selectedDate = <String>[];
   List<String> selectedTime = <String>[];
-  Dates _selectedDate = Dates(date: "", day: "");
+  Dates _selectedDate = Dates(date: "", day: "", fulldate: "");
   // CinemaTime _cinemaTime = CinemaTime(id: 0, cinemaName: "", time: "")
   int timeId = 0;
   CinemaTime cinemaTimeSelected = CinemaTime(id: 0, cinemaName: "", time: "");
@@ -149,7 +185,10 @@ class _ChooseDateState extends State<ChooseDate> {
     setState(() {
       selectedDate = [];
       selectedDate.add(index.toString());
-      _selectedDate = Dates(date: dates[index].date, day: dates[index].day);
+      _selectedDate = Dates(
+          date: dates[index].date,
+          day: dates[index].day,
+          fulldate: dates[index].fulldate);
     });
   }
 
