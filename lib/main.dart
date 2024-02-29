@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         '/signup': (_) => const SignUp(),
         '/genre': (_) => Genre(),
         '/confirm': (_) => ConfirmAccount(),
-        '/home': (_) => const Menu(),
+        '/home': (_) => Menu(selectedIndex: 0),
         '/movieDetail': (_) => const MovieDetail(),
         '/chooseDate': (_) => const ChooseDate(),
         '/chooseRow': (_) => const ChooseRow(),

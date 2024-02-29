@@ -15,6 +15,7 @@ import 'package:flutix/ui/widgets/text_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -252,10 +253,18 @@ class _HomePageState extends State<HomePage> {
                                     scrollDirection: Axis.horizontal,
                                     itemCount: data.length,
                                     itemBuilder: (context, index) {
+                                      final double rating = data[index].rating;
+
+// Format the rating with one decimal place and comma separator
+                                      final NumberFormat formatter =
+                                          NumberFormat("#,##0.0", "en_US");
+                                      final formattedRating =
+                                          formatter.format(rating);
                                       final MoviePlaying movie = MoviePlaying(
                                           title: data[index].title,
-                                          rating: 1,
+                                          rating: double.parse(formattedRating),
                                           star: 5,
+                                          overview: data[index].overview,
                                           link:
                                               "https://image.tmdb.org/t/p/original${data[index].posterPath}");
                                       return MovieCard(
@@ -333,8 +342,9 @@ class _HomePageState extends State<HomePage> {
                                   itemBuilder: (context, index) {
                                     final MoviePlaying movie = MoviePlaying(
                                         title: data[index].title,
-                                        rating: 1,
+                                        rating: data[index].rating,
                                         star: 5,
+                                        overview: data[index].overview,
                                         link:
                                             "https://image.tmdb.org/t/p/original${data[index].posterPath}");
                                     return ComingsoonCard(

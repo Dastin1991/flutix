@@ -123,8 +123,8 @@ class MovieDetail extends StatelessWidget {
                           const SizedBox(
                             height: 8,
                           ),
-                          const Text(
-                            "The near future, a time when both hope and hard ships drive humanity to look to the stars and beyond while a mysterious.\n\nNick Fury is compelled to launch the Avengers Initiative when Loki poses a threat to planet Earth. His squad of superheroes put their minds together to accomplish the task.",
+                          Text(
+                            movie.overview!,
                             style: TextStyle(
                                 fontFamily: 'Raleway',
                                 fontSize: 14,

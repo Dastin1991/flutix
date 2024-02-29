@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutix/model/user.dart';
 import 'package:flutix/services/auth_services.dart';
+import 'package:flutix/services/utils.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -52,6 +53,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
         final userId = newUser.uid;
         final firestore = FirebaseFirestore.instance;
 
+        int randomNumber = Utils.generateCodeNumber();
         CollectionReference users = firestore.collection("users");
         users
             .doc(userId)
@@ -63,9 +65,8 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
               // John Doe
             })
             .then((value) => {
-                  users.doc(userId).collection('ewallet').add({
-                    'balance': 0,
-                  }).then((_) {
+                  users.doc(userId).collection('ewallet').add(
+                      {'balance': 0, 'cardId': 'BWA$randomNumber'}).then((_) {
                     print("User and wallet added successfully");
                   }).catchError((error) {
                     print("Failed to add wallet: $error");
@@ -111,7 +112,8 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
             print('User not found for email: $email');
           }
           // print("Login successfully");
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
+              arguments: {'selectedIndex': 0});
         }
       }
     } catch (e) {

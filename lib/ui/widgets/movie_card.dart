@@ -49,7 +49,7 @@ class MovieCard extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Wrap(
                         children: List.generate(
-                            5,
+                            1,
                             (index) => Icon(
                                   Icons.star,
                                   color: index < movie.star
@@ -62,7 +62,7 @@ class MovieCard extends StatelessWidget {
                       width: 8,
                     ),
                     Text(
-                      '${movie.rating}/10',
+                      '${movie.rating.toString()}/10',
                       style: TextStyle(color: Colors.white),
                     )
                   ],

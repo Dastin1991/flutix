@@ -193,7 +193,8 @@ class _SignInState extends State<SignIn> {
           print('User not found for email: $email');
         }
         // print("Login successfully");
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
+            arguments: {'selectedIndex': 0});
       }
     } catch (e) {
       print("Some error occured" + e.toString());

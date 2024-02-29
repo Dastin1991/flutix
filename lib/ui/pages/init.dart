@@ -26,7 +26,8 @@ class _InitState extends State<Init> {
     String? fullname = prefs.getString('fullname');
     print(fullname);
     if (isLogin != null && isLogin) {
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
+          arguments: {'selectedIndex': 0});
     } else {
       Navigator.pushNamedAndRemoveUntil(
           context, '/onBoarding', (route) => false);

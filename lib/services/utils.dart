@@ -11,6 +11,12 @@ class Utils {
     return formatCurrency.format(value);
   }
 
+  static String formatMoney(int value) {
+    final formatCurrency =
+        NumberFormat.currency(locale: 'id_ID', symbol: '', decimalDigits: 0);
+    return formatCurrency.format(value);
+  }
+
   static void showToastMessage(String message) {
     Fluttertoast.showToast(msg: message);
   }
@@ -22,7 +28,7 @@ class Utils {
       String formattedDate = '${currentDate.day}';
       String formattedDay = _getWeekday(currentDate.weekday);
       String formattedDates = DateFormat('yyyy-MM-dd').format(currentDate);
-      print(formattedDates);
+
       dates.add(Dates(
           date: formattedDate, day: formattedDay, fulldate: formattedDates));
     }
@@ -55,6 +61,15 @@ class Utils {
     // Define the range for the random number (8 digits)
     int min = 10000000; // Minimum 8-digit number
     int max = 99999999; // Maximum 8-digit number
+    // Generate and return the random number
+    return min + random.nextInt(max - min);
+  }
+
+  static int generateCodeNumber() {
+    Random random = Random();
+    // Define the range for the random number (8 digits)
+    int min = 1000; // Minimum 8-digit number
+    int max = 9999; // Maximum 8-digit number
     // Generate and return the random number
     return min + random.nextInt(max - min);
   }

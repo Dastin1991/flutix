@@ -45,7 +45,12 @@ class CheckoutSuccess extends StatelessWidget {
                             backgroundColor: const Color(0xff503E9D),
                             foregroundColor: Colors.white),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/home');
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/home',
+                            (route) => false,
+                            arguments: {'selectedIndex': 1},
+                          );
                         },
                         child: const Text("My Tickets"))),
               ),
@@ -64,7 +69,8 @@ class CheckoutSuccess extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/home', (route) => false);
                     },
                     child: Text(
                       "Back to Home",

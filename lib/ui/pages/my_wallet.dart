@@ -61,10 +61,6 @@ class _MyWalletState extends State<MyWallet> {
       // User data found, you can access it using userSnapshot.data()
       Map<String, dynamic> userData =
           userSnapshot.data() as Map<String, dynamic>;
-      String userFullname = userData['fullname'];
-      String userProfile = userData.containsKey('profileImageUrl')
-          ? userData['profileImageUrl']
-          : '';
 
       //get saldo balance
       CollectionReference ewalletCollection =
@@ -88,8 +84,6 @@ class _MyWalletState extends State<MyWallet> {
           cardId = userCardId;
           // Update the state variable with the retrieved fullname
         });
-
-        await prefs.setString('profileUrl', userProfile);
       } else {
         print('No ewallet document found for user with email: $email');
       }
