@@ -26,10 +26,6 @@ class _MenuState extends State<Menu> {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    _selectedIndex = args['selectedIndex'] ?? 0;
-
     return (Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: ClipRRect(

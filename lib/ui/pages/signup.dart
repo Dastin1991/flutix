@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutix/model/user.dart';
 import 'package:flutix/services/auth_services.dart';
+import 'package:flutix/services/database_services.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutter/cupertino.dart';
@@ -193,84 +194,26 @@ class _SignUpState extends State<SignUp> {
     String email = _emailController.text;
     String password = _passwordController.text;
     String userId = "";
-    // try {
-    //   User? newUser = await _auth.signUpWithEmailAndPassword(email, password);
-    //   if (newUser != null) {
-    //     final userId = newUser.uid;
-    //     final firestore = FirebaseFirestore.instance;
 
-    //     CollectionReference users = firestore.collection("users");
-    //     users
-    //         .doc(userId)
-    //         .set({
-    //           'fullname': username, // John Doe
-    //           'email': email, // John Doe
-    //         })
-    //         .then((value) => {
-    //               users.doc(userId).collection('ewallet').add({
-    //                 'balance': 0,
-    //               }).then((_) {
-    //                 print("User and wallet added successfully");
-    //               }).catchError((error) {
-    //                 print("Failed to add wallet: $error");
-    //               })
-    //             })
-    //         .catchError((error) => print("Failed to add user: $error"));
+    final CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
 
-    //     if (_image != null) {
-    //       firebase_storage.Reference ref = firebase_storage
-    //           .FirebaseStorage.instance
-    //           .ref()
-    //           .child('user_profile_images')
-    //           .child('${DateTime.now()}.jpg');
+    // Query for the user document with the provided email
+    QuerySnapshot querySnapshot =
+        await usersCollection.where('email', isEqualTo: email).get();
 
-    //       firebase_storage.UploadTask uploadTask = ref.putFile(_image!);
-    //       await uploadTask.whenComplete(() async {
-    //         _imageUrl = await ref.getDownloadURL();
-    //         print('Image uploaded to Firebase Storage: $_imageUrl');
-
-    //         // Save image URL to Firestore
-    //         await _firestore.collection('users').doc(userId).update({
-    //           'profileImageUrl': _imageUrl,
-    //         });
-    //       });
-    //     }
-
-    //     User? user = await _auth.signInWithEmailAndPassword(email, password);
-    //     if (user != null) {
-    //       SharedPreferences pref = await SharedPreferences.getInstance();
-    //       pref.setString("email", user.email.toString());
-
-    //       pref.setBool("isLogin", true);
-
-    //       DocumentSnapshot userSnapshot = await getUserByEmail(email);
-
-    //       if (userSnapshot.exists) {
-    //         // User data found, you can access it using userSnapshot.data()
-    //         Map<String, dynamic> userData =
-    //             userSnapshot.data() as Map<String, dynamic>;
-    //         String userFullname = userData['fullname'];
-    //         pref.setString("fullname", userFullname);
-    //       } else {
-    //         print('User not found for email: $email');
-    //       }
-    //       // print("Login successfully");
-    //       Navigator.pushNamed(context, '/genre');
-    //     }
-    //   }
-    // } catch (e) {
-    //   print("Some error occured");
-    //   if (e is FirebaseAuthException) {
-    //     showToastMessage(e.code);
-    //   }
-    // }
-    users = UserProfile(
-        fullname: username,
-        email: email,
-        photo: pathUrl,
-        password: password,
-        pathImage: _image);
-    Navigator.pushNamed(context, '/genre', arguments: users);
+    // Check if the query returned any documents
+    if (querySnapshot.docs.isNotEmpty) {
+      showToast();
+    } else {
+      users = UserProfile(
+          fullname: username,
+          email: email,
+          photo: pathUrl,
+          password: password,
+          pathImage: _image);
+      Navigator.pushNamed(context, '/genre', arguments: users);
+    }
   }
 
   //Image Picker function to get image from gallery
@@ -293,6 +236,16 @@ class _SignUpState extends State<SignUp> {
         _image = File(pickedFile.path);
       }
     });
+  }
+
+  void showToast() {
+    Fluttertoast.showToast(
+      msg: 'Email yang didaftarkan sudah digunakan',
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.TOP,
+      backgroundColor: Color(0xFFFF5C83),
+      textColor: Colors.white,
+    );
   }
 
   //Show options to get image from camera or gallery

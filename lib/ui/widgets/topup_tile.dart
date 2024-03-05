@@ -1,3 +1,4 @@
+import 'package:flutix/services/utils.dart';
 import 'package:flutter/material.dart';
 
 class TopUpTile extends StatelessWidget {
@@ -39,7 +40,7 @@ class TopUpTile extends StatelessWidget {
                   fontWeight: FontWeight.w400),
             ),
             Text(
-              title.toString(),
+              Utils.formatMoney(title),
               style: const TextStyle(
                   fontFamily: 'Raleway',
                   fontSize: 16,

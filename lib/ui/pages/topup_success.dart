@@ -64,7 +64,9 @@ class TopUpSuccess extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/home', (route) => false,
+                          arguments: {'selectedIndex': 0});
                     },
                     child: Text(
                       "Back to Home",

@@ -20,7 +20,7 @@ class TicketCard extends StatelessWidget {
                 height: 90,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.asset(
+                  child: Image.network(
                     ticket.link,
                     fit: BoxFit.cover,
                   ),

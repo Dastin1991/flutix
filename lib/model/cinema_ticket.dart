@@ -9,7 +9,7 @@ class CinemaTicket {
   String? seatNumber;
   String? price;
   String? fee;
-  String? total;
+  int? total;
 
   CinemaTicket(
       {this.idOrder,

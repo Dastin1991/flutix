@@ -218,8 +218,6 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                             foregroundColor: Colors.white),
                         onPressed: () {
                           createAccount(userProfile!);
-                          // Navigator.pushNamedAndRemoveUntil(
-                          //     context, '/home', (route) => false);
                         },
                         child: const Text(
                           "Create My Account",

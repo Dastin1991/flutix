@@ -65,7 +65,7 @@ class MovieDetail extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 16.0),
                           child: Wrap(
                             children: List.generate(
-                                5,
+                                1,
                                 (index) => Icon(
                                       Icons.star,
                                       color: index < movie!.star

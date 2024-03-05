@@ -182,7 +182,7 @@ class _ChooseRowState extends State<ChooseRow> {
                           seatNumber: seatCodesString,
                           price: "Rp. 50.000 x ${seatSelected.length}",
                           fee: "Rp. 20.000 x ${seatSelected.length}",
-                          total: total.toString());
+                          total: total);
                       Navigator.pushNamed(context, '/checkoutMovie',
                           arguments: cinemaTickets);
                       // Navigator.pushNamed(context, '/checkoutMovie');

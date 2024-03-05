@@ -1,6 +1,7 @@
 import 'package:flutix/model/movie_playing.dart';
 import 'package:flutix/model/ticket.dart';
 import 'package:flutix/model/transaction.dart';
+import 'package:flutix/services/utils.dart';
 import 'package:flutter/material.dart';
 
 class TransactionCard extends StatelessWidget {
@@ -13,6 +14,7 @@ class TransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(transactions.type);
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, left: 24),
       child: GestureDetector(
@@ -27,13 +29,35 @@ class TransactionCard extends StatelessWidget {
               SizedBox(
                   width: 70,
                   height: 90,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(
-                      transactions.link,
-                      fit: BoxFit.cover,
-                    ),
-                  )),
+                  child: transactions.type == 'topup'
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Stack(
+                            children: [
+                              Image.asset(
+                                'assets/images/bg_topup.png',
+                                fit: BoxFit.cover,
+                              ),
+                              Center(
+                                child: SizedBox(
+                                  height: 18,
+                                  width: 32,
+                                  child: Image.asset(
+                                    'assets/images/bg_topup2.png',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.network(
+                            transactions.link,
+                            fit: BoxFit.cover,
+                          ),
+                        )),
               const SizedBox(
                 width: 16,
               ),
@@ -49,14 +73,18 @@ class TransactionCard extends StatelessWidget {
                         fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    transactions.amount,
-                    style: const TextStyle(
+                    Utils.format(transactions.total!),
+                    style: TextStyle(
                         fontFamily: 'Raleway',
-                        fontSize: 12,
-                        color: Color(0xFFADADAD)),
+                        fontSize: 16,
+                        color: transactions.type == 'topup'
+                            ? Color(0xFF3E9D9D)
+                            : Color(0xFFFF5C83)),
                   ),
                   Text(
-                    transactions.description,
+                    transactions.type == 'topup'
+                        ? transactions.date!
+                        : transactions.cinema!,
                     style: const TextStyle(
                         fontFamily: 'Raleway',
                         fontSize: 12,

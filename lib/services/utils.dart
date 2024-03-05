@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutix/model/dates.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -72,5 +73,13 @@ class Utils {
     int max = 9999; // Maximum 8-digit number
     // Generate and return the random number
     return min + random.nextInt(max - min);
+  }
+
+  static String formatStringTimestamp(String timestampString) {
+    // Parse the string timestamp into a DateTime object
+    DateTime dateTime = DateTime.parse(timestampString);
+
+    // Format DateTime to "Wed, DD MMMM yyyy" format
+    return DateFormat('E, dd MMMM yyyy').format(dateTime);
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutix/services/utils.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutix/ui/widgets/transaction_card.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyWallet extends StatefulWidget {
@@ -15,8 +16,11 @@ class MyWallet extends StatefulWidget {
 
 class _MyWalletState extends State<MyWallet> {
   String fullname = "";
+  String userId = "";
   String balance = "0";
   String cardId = "BWAFLUTIX";
+
+  List<Transactions> transaction = [];
 
   @override
   void initState() {
@@ -66,6 +70,10 @@ class _MyWalletState extends State<MyWallet> {
       CollectionReference ewalletCollection =
           userSnapshot.reference.collection('ewallet');
 
+      //get saldo balance
+      CollectionReference transactionCollection =
+          userSnapshot.reference.collection('transactions');
+
       // Get the first document in the ewallet collection
       QuerySnapshot ewalletQuerySnapshot =
           await ewalletCollection.limit(1).get();
@@ -76,13 +84,20 @@ class _MyWalletState extends State<MyWallet> {
             ewalletQuerySnapshot.docs.first.data() as Map<String, dynamic>;
         int userBalance = ewalletData['balance'];
         String userCardId = ewalletData['cardId'];
-
         setState(() {
+          userId = userSnapshot.id;
           balance = Utils.format(userBalance)
               .toString(); // Update the state variable with the retrieved balance
           fullname = _fullname!;
           cardId = userCardId;
           // Update the state variable with the retrieved fullname
+        });
+
+        List<Transactions> trans =
+            await getFirestoreTransactions(transactionCollection);
+
+        setState(() {
+          transaction = trans;
         });
       } else {
         print('No ewallet document found for user with email: $email');
@@ -92,17 +107,48 @@ class _MyWalletState extends State<MyWallet> {
     }
   }
 
+  Future<List<Transactions>> getFirestoreTransactions(
+      CollectionReference transactionCollection) async {
+    try {
+      DateTime? dateTime;
+      String? formattedDate;
+      QuerySnapshot transactionsQuerySnapshot =
+          await transactionCollection.get();
+
+      List<Transactions> transactions =
+          transactionsQuerySnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        if (data['type'] == 'topup') {
+          dateTime = data['date'].toDate();
+          formattedDate = DateFormat('E, dd MMMM yyyy').format(dateTime!);
+        }
+
+        // Format DateTime to your desired format
+        return Transactions(
+          id: data['id'], // Use document ID as the transaction ID
+          title: data['title'],
+          amount: data['amount'].toString(),
+          description: data['description'],
+          link: data['link'],
+          type: data['type'],
+          cinema: data['cinema'],
+          date: formattedDate,
+          seat: data['seat'],
+          price: data['price'],
+          fee: data['fee'],
+          total: int.parse(data['total'].toString()),
+        );
+      }).toList();
+
+      return transactions;
+    } catch (error) {
+      print('Error retrieving Firestore transactions: $error');
+      throw error;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Transactions> transaction = [
-      Transactions(
-          id: 1,
-          title: 'Avengers: Infinity Wars',
-          amount: 'Rp. 650.000',
-          description: 'CGV Paris Van Java Mall',
-          link: 'assets/images/avengers.png',
-          type: 'buy')
-    ];
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -137,128 +183,137 @@ class _MyWalletState extends State<MyWallet> {
                   ),
                 ),
                 Positioned(
-                    left: 32,
-                    top: 100,
-                    child: Text(
-                      balance,
-                      style: const TextStyle(
-                          fontFamily: 'Raleway',
-                          fontSize: 28,
-                          color: Colors.white),
-                    )),
+                  left: 32,
+                  top: 100,
+                  child: Text(
+                    balance,
+                    style: const TextStyle(
+                      fontFamily: 'Raleway',
+                      fontSize: 28,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
                 Positioned(
-                    left: 32,
-                    bottom: 40,
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Card Holder",
-                              style: TextStyle(
+                  left: 32,
+                  bottom: 40,
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Card Holder",
+                            style: TextStyle(
+                              fontFamily: 'Raleway',
+                              fontSize: 10,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                fullname,
+                                style: const TextStyle(
                                   fontFamily: 'Raleway',
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.white),
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  fullname,
-                                  style: TextStyle(
-                                      fontFamily: 'Raleway',
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
                                 ),
-                                const SizedBox(
-                                  width: 4,
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Container(
+                                width: 14,
+                                height: 14,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF3E9D9D),
+                                  borderRadius: BorderRadius.circular(100),
                                 ),
-                                Container(
-                                  width: 14,
-                                  height: 14,
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xFF3E9D9D),
-                                      borderRadius: BorderRadius.circular(100)),
-                                  child: const Icon(
-                                    Icons.check,
-                                    size: 14,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              ],
+                                child: const Icon(
+                                  Icons.check,
+                                  size: 14,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 36,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Card ID",
+                            style: TextStyle(
+                              fontFamily: 'Raleway',
+                              fontSize: 10,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.white,
                             ),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 36,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Card ID",
-                              style: TextStyle(
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                cardId,
+                                style: const TextStyle(
                                   fontFamily: 'Raleway',
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.white),
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  cardId,
-                                  style: TextStyle(
-                                      fontFamily: 'Raleway',
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
                                 ),
-                                const SizedBox(
-                                  width: 4,
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Container(
+                                width: 14,
+                                height: 14,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF3E9D9D),
+                                  borderRadius: BorderRadius.circular(100),
                                 ),
-                                Container(
-                                  width: 14,
-                                  height: 14,
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xFF3E9D9D),
-                                      borderRadius: BorderRadius.circular(100)),
-                                  child: const Icon(
-                                    Icons.check,
-                                    size: 14,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ))
+                                child: const Icon(
+                                  Icons.check,
+                                  size: 14,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 24.0),
-                  child: Text("Recent Transactions"),
-                ),
-                Wrap(
+            Padding(
+              padding: const EdgeInsets.only(left: 24.0),
+              child: const Text("Recent Transactions"),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Wrap(
                   spacing: 10,
                   runSpacing: 10,
                   children: List.generate(
-                      transaction.length,
-                      (index) => TransactionCard(
-                            transactions: transaction[index],
-                            onTap: () {
-                              handlerClickTrans(context, transaction[index]);
-                            },
-                          )),
+                    transaction.length,
+                    (index) => TransactionCard(
+                      transactions: transaction[index],
+                      onTap: () {
+                        handlerClickTrans(context, transaction[index]);
+                      },
+                    ),
+                  ),
                 ),
-              ],
-            )
+              ),
+            ),
           ],
         ),
       ),
@@ -267,5 +322,6 @@ class _MyWalletState extends State<MyWallet> {
 }
 
 void handlerClickTrans(BuildContext context, Transactions transactions) {
-  Navigator.pushNamed(context, '/ticketDetail', arguments: transactions);
+  if (transactions.type != 'topup')
+    Navigator.pushNamed(context, '/ticketDetail', arguments: transactions);
 }

@@ -1,6 +1,7 @@
 import 'package:flutix/model/crew.dart';
 import 'package:flutix/model/movie_playing.dart';
 import 'package:flutix/model/transaction.dart';
+import 'package:flutix/services/utils.dart';
 import 'package:flutix/ui/widgets/crew_card.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,7 @@ class TicketDetail extends StatelessWidget {
                         width: double.infinity,
                         height: 270,
                         child: Image(
-                          image: AssetImage(transactions.link),
+                          image: NetworkImage(transactions.link),
                           fit: BoxFit.cover,
                         )),
                     const SizedBox(
@@ -69,7 +70,7 @@ class TicketDetail extends StatelessWidget {
                                     fontFamily: 'Raleway',
                                     color: Color(0xFFADADAD)),
                               ),
-                              Text('Paris Van Java')
+                              Text(transactions.cinema!)
                             ],
                           ),
                           Row(
@@ -81,7 +82,7 @@ class TicketDetail extends StatelessWidget {
                                     fontFamily: 'Raleway',
                                     color: Color(0xFFADADAD)),
                               ),
-                              Text('Sat 21, 12:20')
+                              Text(transactions.date!)
                             ],
                           ),
                           Row(
@@ -93,7 +94,7 @@ class TicketDetail extends StatelessWidget {
                                     fontFamily: 'Raleway',
                                     color: Color(0xFFADADAD)),
                               ),
-                              Text('B3, B4')
+                              Text(transactions.seat!)
                             ],
                           ),
                           Row(
@@ -105,7 +106,7 @@ class TicketDetail extends StatelessWidget {
                                     fontFamily: 'Raleway',
                                     color: Color(0xFFADADAD)),
                               ),
-                              Text('22081996')
+                              Text(transactions.id!.toString())
                             ],
                           ),
                           Divider(),
@@ -128,7 +129,7 @@ class TicketDetail extends StatelessWidget {
                                         fontFamily: 'Raleway',
                                         color: Color(0xFFADADAD)),
                                   ),
-                                  Text('Rp. 180.049')
+                                  Text(Utils.format(transactions.total!))
                                 ],
                               ),
                               Image(

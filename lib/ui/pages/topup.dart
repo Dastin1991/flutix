@@ -1,11 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutix/model/topup.dart';
+import 'package:flutix/services/database_services.dart';
+import 'package:flutix/services/utils.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutix/ui/widgets/topup_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class TopUp extends StatelessWidget {
+class TopUp extends StatefulWidget {
   const TopUp({super.key});
 
+  @override
+  State<TopUp> createState() => _TopUpState();
+}
+
+class _TopUpState extends State<TopUp> {
+  List<int> selectedTopUp = <int>[];
+  TextEditingController amountController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     List<TopUpClass> topUp = [
@@ -31,9 +42,17 @@ class TopUp extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: amountController,
+                decoration: const InputDecoration(
                     labelText: "Amount", border: OutlineInputBorder()),
+                onChanged: (value) {
+                  // Check if the TextField is empty
+                  if (value.isNotEmpty) {
+                    // Update the TextField with the selected nominal value
+                    _onSelectedTopUp(int.parse(value));
+                  }
+                },
               ),
               const SizedBox(
                 height: 16,
@@ -50,10 +69,14 @@ class TopUp extends StatelessWidget {
                     topUp.length,
                     (index) => TopUpTile(
                         title: topUp[index].nominal,
-                        selected: false,
-                        onTap: () {})),
+                        selected: selectedTopUp.contains(topUp[index].nominal)
+                            ? true
+                            : false,
+                        onTap: () {
+                          _onSelectedTopUp(topUp[index].nominal);
+                        })),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 250,
               ),
               Center(
@@ -65,7 +88,9 @@ class TopUp extends StatelessWidget {
                             backgroundColor: Color(0xff3E9D9D),
                             foregroundColor: Colors.white),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/topupSuccess');
+                          if (amountController.text.isNotEmpty) {
+                            topUpBalance(int.parse(amountController.text));
+                          }
                         },
                         child: const Text(
                           "Top Up Now",
@@ -80,5 +105,87 @@ class TopUp extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onSelectedTopUp(int nominal) {
+    amountController.text = nominal.toString();
+    setState(() {
+      selectedTopUp = [];
+      selectedTopUp.add(nominal);
+    });
+  }
+
+  Future<void> topUpBalance(int nominal) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String? email = prefs.getString('email');
+
+    try {
+      final firestore = FirebaseFirestore.instance;
+      DocumentSnapshot userSnapshot =
+          await DatabaseServices.getUserByEmail(email!);
+
+      if (userSnapshot.exists) {
+        // User exists, perform transaction to create subcollection
+        final String userId = userSnapshot.id;
+        int randomNumber = Utils.generateRandomNumber();
+        DateTime dateTime = DateTime.now();
+        CollectionReference users = firestore.collection("users");
+
+        users.doc(userId).collection('transactions').add({
+          'id': randomNumber,
+          'title': 'Top Up Ewallet',
+          'description': '',
+          'link': '',
+          'type': '',
+          'cinema': '',
+          'date': dateTime,
+          'seat': '',
+          'price': '',
+          'fee': '',
+          'type': 'topup',
+          'total': amountController.text
+        }).then((_) async {
+          print("User and wallet added successfully");
+
+          //get saldo balance
+          CollectionReference ewalletCollection =
+              userSnapshot.reference.collection('ewallet');
+
+          // Get the first document in the ewallet collection
+          QuerySnapshot ewalletQuerySnapshot =
+              await ewalletCollection.limit(1).get();
+
+          if (ewalletQuerySnapshot.docs.isNotEmpty) {
+            // Get the reference to the first document in the ewallet collection
+            DocumentReference ewalletDocRef =
+                ewalletQuerySnapshot.docs.first.reference;
+
+            // Get the current balance from the ewallet document
+            Map<String, dynamic> ewalletData =
+                ewalletQuerySnapshot.docs.first.data() as Map<String, dynamic>;
+            int currentBalance = ewalletData['balance'] ?? 0;
+
+            // Subtract 10000 from the current balance
+            int newBalance = currentBalance + int.parse(amountController.text);
+
+            // Update the balance field in the ewallet document
+            await ewalletDocRef.update({
+              'balance': newBalance,
+            });
+
+            print('Balance updated successfully. New balance: $newBalance');
+          } else {
+            print('No ewallet document found for user with email: $email');
+          }
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/topupSuccess', (route) => false);
+        }).catchError((error) {
+          print("Failed to add wallet: $error");
+        });
+      }
+    } catch (e) {
+      print("Some error occured");
+    }
   }
 }
