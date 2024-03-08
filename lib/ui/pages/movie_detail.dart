@@ -62,7 +62,7 @@ class MovieDetail extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
+                          padding: const EdgeInsets.all(0),
                           child: Wrap(
                             children: List.generate(
                                 1,
@@ -148,6 +148,9 @@ class MovieDetail extends StatelessWidget {
                               },
                               child: const Text("Continue to Book"))),
                     ),
+                    SizedBox(
+                      height: 16,
+                    )
                   ],
                 ),
               )

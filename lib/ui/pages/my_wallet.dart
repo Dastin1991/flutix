@@ -1,11 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutix/api/api.dart';
 import 'package:flutix/model/transaction.dart';
 import 'package:flutix/services/utils.dart';
+import 'package:flutix/ui/pages/bloc/my_wallet_bloc.dart';
 import 'package:flutix/ui/widgets/header.dart';
+import 'package:flutix/ui/widgets/placeholders.dart';
 import 'package:flutix/ui/widgets/transaction_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MyWallet extends StatefulWidget {
   const MyWallet({super.key});
@@ -19,6 +24,8 @@ class _MyWalletState extends State<MyWallet> {
   String userId = "";
   String balance = "0";
   String cardId = "BWAFLUTIX";
+
+  String email = "";
 
   List<Transactions> transaction = [];
 
@@ -50,11 +57,12 @@ class _MyWalletState extends State<MyWallet> {
   Future<void> checkSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String? email = prefs.getString('email');
+    String? _email = prefs.getString('email');
     String? _fullname = prefs.getString('fullname');
     // String? _profile_url = prefs.getString('profile_url');
 
     setState(() {
+      email = _email!;
       fullname =
           _fullname!; // Update the state variable with the retrieved fullname
     });
@@ -149,179 +157,261 @@ class _MyWalletState extends State<MyWallet> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Header(title: 'My Wallet'),
-            Stack(
-              children: [
-                const Image(image: AssetImage('assets/images/bg_card.png')),
-                Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 18,
-                        height: 18,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: const Color(0xFFFFF2CB)),
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: const Color(0xFFFBD460)),
-                      )
-                    ],
-                  ),
-                ),
-                Positioned(
-                  left: 32,
-                  top: 100,
-                  child: Text(
-                    balance,
-                    style: const TextStyle(
-                      fontFamily: 'Raleway',
-                      fontSize: 28,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 32,
-                  bottom: 40,
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Card Holder",
-                            style: TextStyle(
-                              fontFamily: 'Raleway',
-                              fontSize: 10,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Row(
+    return email != ""
+        ? BlocProvider(
+            create: (context) =>
+                MyWalletBloc(api: Api())..add(LoadMyWallet(email)),
+            child: Scaffold(
+              body: SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Header(title: 'My Wallet'),
+                    Stack(
+                      children: [
+                        const Image(
+                            image: AssetImage('assets/images/bg_card.png')),
+                        Padding(
+                          padding: const EdgeInsets.all(32.0),
+                          child: Row(
                             children: [
-                              Text(
-                                fullname,
-                                style: const TextStyle(
-                                  fontFamily: 'Raleway',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
+                              Container(
+                                width: 18,
+                                height: 18,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: const Color(0xFFFFF2CB)),
                               ),
                               const SizedBox(
                                 width: 4,
                               ),
                               Container(
-                                width: 14,
-                                height: 14,
+                                width: 30,
+                                height: 30,
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF3E9D9D),
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                child: const Icon(
-                                  Icons.check,
-                                  size: 14,
-                                  color: Colors.white,
-                                ),
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: const Color(0xFFFBD460)),
                               )
                             ],
                           ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 36,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Card ID",
-                            style: TextStyle(
+                        ),
+                        Positioned(
+                          left: 32,
+                          top: 100,
+                          child: Text(
+                            balance,
+                            style: const TextStyle(
                               fontFamily: 'Raleway',
-                              fontSize: 10,
-                              fontWeight: FontWeight.w300,
+                              fontSize: 28,
                               color: Colors.white,
                             ),
                           ),
-                          Row(
+                        ),
+                        Positioned(
+                          left: 32,
+                          bottom: 40,
+                          child: Row(
                             children: [
-                              Text(
-                                cardId,
-                                style: const TextStyle(
-                                  fontFamily: 'Raleway',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Card Holder",
+                                    style: TextStyle(
+                                      fontFamily: 'Raleway',
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        fullname,
+                                        style: const TextStyle(
+                                          fontFamily: 'Raleway',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 4,
+                                      ),
+                                      Container(
+                                        width: 14,
+                                        height: 14,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF3E9D9D),
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                        ),
+                                        child: const Icon(
+                                          Icons.check,
+                                          size: 14,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
                               const SizedBox(
-                                width: 4,
+                                width: 36,
                               ),
-                              Container(
-                                width: 14,
-                                height: 14,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF3E9D9D),
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                child: const Icon(
-                                  Icons.check,
-                                  size: 14,
-                                  color: Colors.white,
-                                ),
-                              )
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Card ID",
+                                    style: TextStyle(
+                                      fontFamily: 'Raleway',
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        cardId,
+                                        style: const TextStyle(
+                                          fontFamily: 'Raleway',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 4,
+                                      ),
+                                      Container(
+                                        width: 14,
+                                        height: 14,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF3E9D9D),
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                        ),
+                                        child: const Icon(
+                                          Icons.check,
+                                          size: 14,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 24.0),
-              child: const Text("Recent Transactions"),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: List.generate(
-                    transaction.length,
-                    (index) => TransactionCard(
-                      transactions: transaction[index],
-                      onTap: () {
-                        handlerClickTrans(context, transaction[index]);
-                      },
+                        )
+                      ],
                     ),
-                  ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 24.0),
+                      child: Text("Recent Transactions"),
+                    ),
+                    // Expanded(
+                    //   child: SingleChildScrollView(
+                    //     child: Wrap(
+                    //       spacing: 10,
+                    //       runSpacing: 10,
+                    //       children: List.generate(
+                    //         transaction.length,
+                    //         (index) => TransactionCard(
+                    //           transactions: transaction[index],
+                    //           onTap: () {
+                    //             handlerClickTrans(context, transaction[index]);
+                    //           },
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    Expanded(
+                      child: BlocBuilder<MyWalletBloc, MyWalletState>(
+                        builder: (context, state) {
+                          if (state is MyWalletLoading) {
+                            return Column(
+                                children: List.generate(3, (rowIndex) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 16.0, top: 16),
+                                child: SizedBox(
+                                  height: 100,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount:
+                                        1, // Number of placeholders per row
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: SizedBox(
+                                          // width: 70,
+                                          // height: 90,
+                                          child: Shimmer.fromColors(
+                                            baseColor: Colors.grey.shade300,
+                                            highlightColor:
+                                                Colors.grey.shade100,
+                                            enabled: true,
+                                            child: TransactionPlaceholder(),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            }));
+                          } else if (state is MyWalletLoaded) {
+                            final data = state.transaction;
+                            return ListView.builder(
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                final Transactions _transactions = Transactions(
+                                  id: data[index]
+                                      .id, // Use document ID as the transaction ID
+                                  title: data[index].title,
+                                  amount: data[index].total.toString(),
+                                  description: data[index].description,
+                                  link: data[index].link,
+                                  type: data[index].type,
+                                  cinema: data[index].cinema,
+                                  date: data[index].cinema,
+                                  seat: data[index].seat,
+                                  price: data[index].price,
+                                  fee: data[index].fee,
+                                  total: data[index].total,
+                                );
+                                return GestureDetector(
+                                  child: TransactionCard(
+                                    onTap: () {
+                                      handlerClickTrans(context, data[index]);
+                                    },
+                                    transactions: _transactions,
+                                  ),
+                                );
+                              },
+                            );
+                          } else {
+                            return Container(); // Handle other states if needed
+                          }
+                        },
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          )
+        : Container();
   }
 }
 
 void handlerClickTrans(BuildContext context, Transactions transactions) {
+  print(transactions.date);
   if (transactions.type != 'topup')
     Navigator.pushNamed(context, '/ticketDetail', arguments: transactions);
 }

@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutix/api/constants.dart';
 import 'package:flutix/model/movie_model.dart';
+import 'package:flutix/model/transaction.dart';
+import 'package:flutix/services/database_services.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class Api {
   final playingApiUrl = "/movie/now_playing?api_key=$apiKey";
@@ -22,29 +26,55 @@ class Api {
     return DataMovie.fromJson(response.data);
   }
 
-  // Future<List<Movie>> getNowPlayingMovies() async {
-  //   final response = await Dio().get(playingApiUrl);
+  Future<List<Transactions>> getFirestoreTransactions(String email) async {
+    List<Transactions> transactions = [];
+    try {
+      DateTime? dateTime;
+      String? formattedDate;
 
-  //   if (response.statusCode == 200) {
-  //     var jsonList = response.data;
+      DocumentSnapshot userSnapshot =
+          await DatabaseServices.getUserByEmail(email!);
 
-  //     print(jsonList);
-  //   } else {
-  //     throw Exception('Failed to load now playing');
-  //   }
-  // }
+      if (userSnapshot.exists) {
+        // User data found, you can access it using userSnapshot.data()
+        Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
 
-  // Future<List<Movie>> getComingSoonMovies() async {
-  //   final response = await http.get(Uri.parse(upComingApiUrl));
+        CollectionReference transactionCollection =
+            userSnapshot.reference.collection('transactions');
 
-  //   if (response.statusCode == 200) {
-  //     final List<dynamic> data = json.decode(response.body)['results'];
+        QuerySnapshot transactionsQuerySnapshot =
+            await transactionCollection.get();
 
-  //     List<Movie> movies = data.map((movie) => Movie.fromMap(movie)).toList();
+        transactions = transactionsQuerySnapshot.docs.map((doc) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+          if (data['type'] == 'topup') {
+            dateTime = data['date'].toDate();
+            formattedDate = DateFormat('E, dd MMMM yyyy').format(dateTime!);
+          }
 
-  //     return movies;
-  //   } else {
-  //     throw Exception('Failed to load now playing');
-  //   }
-  // }
+          // Format DateTime to your desired format
+          return Transactions(
+            id: data['id'], // Use document ID as the transaction ID
+            title: data['title'],
+            amount: data['amount'].toString(),
+            description: data['description'],
+            link: data['link'],
+            type: data['type'],
+            cinema: data['cinema'],
+            date: data['type'] == 'topup' ? formattedDate : data['date'],
+            seat: data['seat'],
+            price: data['price'],
+            fee: data['fee'],
+            total: int.parse(data['total'].toString()),
+          );
+        }).toList();
+        return transactions;
+      }
+      return transactions;
+    } catch (error) {
+      print('Error retrieving Firestore transactions: $error');
+      throw error;
+    }
+  }
 }

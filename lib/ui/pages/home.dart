@@ -11,12 +11,14 @@ import 'package:flutix/ui/widgets/category_card.dart';
 import 'package:flutix/ui/widgets/comingsoon_card.dart';
 import 'package:flutix/ui/widgets/lucky_day_card.dart';
 import 'package:flutix/ui/widgets/movie_card.dart';
+import 'package:flutix/ui/widgets/placeholders.dart';
 import 'package:flutix/ui/widgets/text_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -26,9 +28,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<List<Movie>> Homes;
-  late Future<List<Movie>> upcomingMovies;
-  var jsonList;
   String fullname = "";
   String balance = "0";
   String profile_url = "";
@@ -164,7 +163,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.only(top: 30),
+                padding: const EdgeInsets.only(top: 30),
                 width: double.infinity,
                 height: 144,
                 decoration: const BoxDecoration(
@@ -189,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                                 ? CircleAvatar(
                                     backgroundImage: NetworkImage(profile_url),
                                   )
-                                : CircleAvatar(
+                                : const CircleAvatar(
                                     backgroundImage: AssetImage(
                                         'assets/images/user_pic.png')),
                           ),
@@ -202,14 +201,14 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Text(
                                 "$fullname",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontFamily: 'Raleway',
                                     fontSize: 18,
                                     color: Colors.white),
                               ),
                               Text(
                                 balance.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontFamily: 'Raleway',
                                     fontSize: 18,
                                     color: Color(0xFFFBD460)),
@@ -242,8 +241,34 @@ class _HomePageState extends State<HomePage> {
                         child: BlocBuilder<HomeBloc, HomeState>(
                           builder: (context, state) {
                             if (state is HomeLoading) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                              return Column(
+                                children: [
+                                  SizedBox(
+                                    height: 140,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: 3, // Number of banners
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: SizedBox(
+                                            width: 210,
+                                            height: 140,
+                                            child: Shimmer.fromColors(
+                                              baseColor: Colors.grey.shade300,
+                                              highlightColor:
+                                                  Colors.grey.shade100,
+                                              enabled: true,
+                                              child: BannerPlaceholder(),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
                             } else if (state is HomeLoaded) {
                               final data = state.movies;
                               return SizedBox(
@@ -325,12 +350,37 @@ class _HomePageState extends State<HomePage> {
                       height: 12,
                     ),
                     SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
                       child: BlocBuilder<HomeBloc, HomeState>(
                         builder: (context, state) {
                           if (state is HomeLoading) {
-                            return const Center(
-                                child: CircularProgressIndicator());
+                            return Column(
+                              children: [
+                                SizedBox(
+                                  height: 140,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: 3,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: SizedBox(
+                                          width: 100,
+                                          height: 140,
+                                          child: Shimmer.fromColors(
+                                            baseColor: Colors.grey.shade300,
+                                            highlightColor:
+                                                Colors.grey.shade100,
+                                            enabled: true,
+                                            child: ComingSoonPlaceholder(),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
                           } else if (state is HomeLoaded) {
                             final data = state.upcoming;
                             return SizedBox(

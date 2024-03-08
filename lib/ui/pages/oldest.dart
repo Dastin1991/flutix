@@ -3,9 +3,11 @@ import 'package:flutix/model/ticket.dart';
 import 'package:flutix/services/database_services.dart';
 import 'package:flutix/services/utils.dart';
 import 'package:flutix/ui/pages/ticket.dart';
+import 'package:flutix/ui/widgets/placeholders.dart';
 import 'package:flutix/ui/widgets/ticket_card.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Oldest extends StatefulWidget {
   const Oldest({Key? key}) : super(key: key);
@@ -16,6 +18,7 @@ class Oldest extends StatefulWidget {
 
 class _OldestState extends State<Oldest> {
   List<MTicket> tickets = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -45,6 +48,7 @@ class _OldestState extends State<Oldest> {
 
       setState(() {
         tickets = trans;
+        isLoading = false;
       });
     } else {
       print('User not found for email: $email');
@@ -80,30 +84,47 @@ class _OldestState extends State<Oldest> {
 
   @override
   Widget build(BuildContext context) {
-    // List<MTicket> tickets = [
-    //   MTicket(
-    //       title: 'Avengers',
-    //       genre: 'Action',
-    //       location: 'Bandung',
-    //       link: 'assets/images/avengers.png'),
-    //   MTicket(
-    //       title: 'Fat Dragon',
-    //       genre: 'Action',
-    //       location: 'Bandung',
-    //       link: 'assets/images/deadpool.png'),
-    // ];
     return (Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: List.generate(
-              tickets.length,
-              (index) => TicketCard(
-                    ticket: tickets[index],
-                  )),
-        ),
+        child: isLoading
+            ? Column(
+                children: List.generate(3, (rowIndex) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 16),
+                  child: SizedBox(
+                    height: 100,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 1, // Number of placeholders per row
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            // width: 70,
+                            // height: 90,
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                              enabled: true,
+                              child: TransactionPlaceholder(),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              }))
+            : Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: List.generate(
+                    tickets.length,
+                    (index) => TicketCard(
+                          ticket: tickets[index],
+                        )),
+              ),
       ),
     ));
   }
