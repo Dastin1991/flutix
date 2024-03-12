@@ -21,6 +21,8 @@ class _SignInState extends State<SignIn> {
 
   bool _isButtonEnabled = false;
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -168,13 +170,17 @@ class _SignInState extends State<SignIn> {
     }
   }
 
-  void _signIn() async {
+  Future<void> _signIn() async {
     String email = _emailController.text;
     String password = _passwordController.text;
 
     try {
-      User? user =
-          await _authServices.signInWithEmailAndPassword(email, password);
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      User? user = userCredential.user;
       if (user != null) {
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString("email", user.email.toString());

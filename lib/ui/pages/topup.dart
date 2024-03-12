@@ -3,6 +3,7 @@ import 'package:flutix/model/topup.dart';
 import 'package:flutix/services/database_services.dart';
 import 'package:flutix/services/utils.dart';
 import 'package:flutix/ui/widgets/header.dart';
+import 'package:flutix/ui/widgets/loading_modal.dart';
 import 'package:flutix/ui/widgets/topup_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -89,6 +90,12 @@ class _TopUpState extends State<TopUp> {
                             foregroundColor: Colors.white),
                         onPressed: () {
                           if (amountController.text.isNotEmpty) {
+                            showCustomDialog(context);
+                            // Simulate some loading process
+                            // Future.delayed(Duration(seconds: 3), () {
+                            //   Navigator.of(context)
+                            //       .pop(); // Close the loading modal
+                            // });
                             topUpBalance(int.parse(amountController.text));
                           }
                         },
@@ -113,6 +120,15 @@ class _TopUpState extends State<TopUp> {
       selectedTopUp = [];
       selectedTopUp.add(nominal);
     });
+  }
+
+  void showCustomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return LoadingModal();
+      },
+    );
   }
 
   Future<void> topUpBalance(int nominal) async {
@@ -178,6 +194,8 @@ class _TopUpState extends State<TopUp> {
           } else {
             print('No ewallet document found for user with email: $email');
           }
+
+          Navigator.of(context).pop();
           Navigator.pushNamedAndRemoveUntil(
               context, '/topupSuccess', (route) => false);
         }).catchError((error) {

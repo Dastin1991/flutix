@@ -4,6 +4,7 @@ import 'package:flutix/model/transaction.dart';
 import 'package:flutix/services/database_services.dart';
 import 'package:flutix/services/utils.dart';
 import 'package:flutix/ui/widgets/header.dart';
+import 'package:flutix/ui/widgets/loading_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,7 +18,7 @@ class CheckoutMovie extends StatefulWidget {
 }
 
 class _CheckoutMovieState extends State<CheckoutMovie> {
-  String? orderId;
+  String? orderId = "";
   String balance = "0";
   int? totalCost = 0;
   int? userBalance = 0;
@@ -26,10 +27,10 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
   @override
   void initState() {
     super.initState();
+    randomNumber();
+    getSaldoBalance();
     if (widget.cinemaTicket != null) {
       totalCost = widget.cinemaTicket!.total;
-      randomNumber();
-      getSaldoBalance();
     }
   }
 
@@ -38,6 +39,15 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
     setState(() {
       orderId = randomNumber.toString();
     });
+  }
+
+  void showCustomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return LoadingModal();
+      },
+    );
   }
 
   Future<void> getSaldoBalance() async {
@@ -143,6 +153,7 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
           } else {
             print('No ewallet document found for user with email: $email');
           }
+          Navigator.of(context).pop();
           Navigator.pushNamedAndRemoveUntil(
               context, '/checkoutSuccess', (route) => false);
         }).catchError((error) {
@@ -175,6 +186,7 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
     if (arg is CinemaTicket) {
       cinemaTicket = arg;
     }
+    print(cinemaTicket!.idOrder);
     return Scaffold(
       body: cinemaTicket != null
           ? SafeArea(
@@ -232,7 +244,79 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
                             Text(orderId!)
                           ],
                         ),
-                        // Other rows...
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Cinema',
+                              style: TextStyle(
+                                  fontFamily: 'Raleway',
+                                  color: Color(0xFFADADAD)),
+                            ),
+                            Text(cinemaTicket.cinema.toString())
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Date & Time',
+                              style: TextStyle(
+                                  fontFamily: 'Raleway',
+                                  color: Color(0xFFADADAD)),
+                            ),
+                            Text("${cinemaTicket.date} ${cinemaTicket.time}")
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Seat Number',
+                              style: TextStyle(
+                                  fontFamily: 'Raleway',
+                                  color: Color(0xFFADADAD)),
+                            ),
+                            Text(cinemaTicket.seatNumber.toString())
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Price',
+                              style: TextStyle(
+                                  fontFamily: 'Raleway',
+                                  color: Color(0xFFADADAD)),
+                            ),
+                            Text(cinemaTicket.price.toString())
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Fee',
+                              style: TextStyle(
+                                  fontFamily: 'Raleway',
+                                  color: Color(0xFFADADAD)),
+                            ),
+                            Text(cinemaTicket.fee.toString())
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Total',
+                              style: TextStyle(
+                                  fontFamily: 'Raleway',
+                                  color: Color(0xFFADADAD)),
+                            ),
+                            Text(Utils.format(
+                                int.parse(cinemaTicket.total.toString())))
+                          ],
+                        ),
                         const SizedBox(
                           height: 8,
                         ),
@@ -289,6 +373,7 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
                                         fee: cinemaTicket.fee!,
                                         total: cinemaTicket.total!,
                                       );
+                                      showCustomDialog(context);
                                       createTicket(trans);
                                     },
                                     child: const Text(

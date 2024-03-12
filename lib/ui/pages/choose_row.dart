@@ -175,6 +175,7 @@ class _ChooseRowState extends State<ChooseRow> {
                       var fee = 20000 * seatSelected.length;
                       var total = price + fee;
                       var cinemaTickets = CinemaTicket(
+                          idOrder: "123",
                           movie: cinemaTicket?.movie,
                           date: cinemaTicket?.date,
                           time: cinemaTicket?.time,
@@ -183,6 +184,7 @@ class _ChooseRowState extends State<ChooseRow> {
                           price: "Rp. 50.000 x ${seatSelected.length}",
                           fee: "Rp. 20.000 x ${seatSelected.length}",
                           total: total);
+
                       Navigator.pushNamed(context, '/checkoutMovie',
                           arguments: cinemaTickets);
                       // Navigator.pushNamed(context, '/checkoutMovie');
