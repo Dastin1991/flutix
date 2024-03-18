@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutix/services/auth_services.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
+import 'package:flutix/ui/widgets/loading_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,6 +46,15 @@ class _SignInState extends State<SignIn> {
       _isButtonEnabled = _emailController.text.isNotEmpty &&
           _passwordController.text.isNotEmpty;
     });
+  }
+
+  void showCustomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return LoadingModal();
+      },
+    );
   }
 
   @override
@@ -173,7 +183,7 @@ class _SignInState extends State<SignIn> {
   Future<void> _signIn() async {
     String email = _emailController.text;
     String password = _passwordController.text;
-
+    showCustomDialog(context);
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
@@ -199,14 +209,23 @@ class _SignInState extends State<SignIn> {
           print('User not found for email: $email');
         }
         // print("Login successfully");
+        Navigator.of(context).pop();
         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
             arguments: {'selectedIndex': 0});
       }
     } catch (e) {
-      print("Some error occured" + e.toString());
+      Navigator.of(context).pop();
+      String errorMessage = "An error occurred";
       if (e is FirebaseAuthException) {
-        showToastMessage(e.code);
+        if (e.code == 'user-not-found' ||
+            e.code == 'wrong-password' ||
+            e.code == 'invalid-credential') {
+          errorMessage = "Invalid email or password";
+        } else {
+          errorMessage = "Firebase authentication error: ${e.message}";
+        }
       }
+      showToastMessage(errorMessage);
     }
   }
 

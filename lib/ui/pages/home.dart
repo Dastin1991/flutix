@@ -398,11 +398,10 @@ class _HomePageState extends State<HomePage> {
                                         link:
                                             "https://image.tmdb.org/t/p/original${data[index].posterPath}");
                                     return ComingsoonCard(
-                                      movie: movie,
-                                      // onTap: () {
-                                      //   handlerClickMovie(context, movie);
-                                      // }
-                                    );
+                                        movie: movie,
+                                        onTap: () {
+                                          handlerClickMovie(context, movie);
+                                        });
                                   }),
                             );
                           } else if (state is HomeError) {

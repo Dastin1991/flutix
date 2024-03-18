@@ -91,11 +91,6 @@ class _TopUpState extends State<TopUp> {
                         onPressed: () {
                           if (amountController.text.isNotEmpty) {
                             showCustomDialog(context);
-                            // Simulate some loading process
-                            // Future.delayed(Duration(seconds: 3), () {
-                            //   Navigator.of(context)
-                            //       .pop(); // Close the loading modal
-                            // });
                             topUpBalance(int.parse(amountController.text));
                           }
                         },

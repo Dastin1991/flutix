@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutix/api/constants.dart';
 import 'package:flutix/model/movie_model.dart';
+import 'package:flutix/model/movie_trailer.dart';
 import 'package:flutix/model/transaction.dart';
 import 'package:flutix/services/database_services.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,23 @@ import 'package:intl/intl.dart';
 class Api {
   final playingApiUrl = "/movie/now_playing?api_key=$apiKey";
   final upComingApiUrl = "/movie/upcoming?api_key=$apiKey";
+  final videoApiUrl = "/movie/1011985/videos?api_key=$apiKey";
 
   final dio = Dio(BaseOptions(baseUrl: 'https://api.themoviedb.org/3'));
 
   Future<DataMovie> getNowPlayingMovie() async {
     final response = await dio.get(playingApiUrl);
     return DataMovie.fromJson(response.data);
+  }
+
+  Future<List<MovieTrailer>> getVideoMovies(String id) async {
+    print('idnya $id');
+    final response = await dio.get(videoApiUrl);
+    final List<dynamic> data =
+        response.data; // Assuming the response data is a list
+    final List<MovieTrailer> trailers =
+        data.map((item) => MovieTrailer.fromJson(item)).toList();
+    return trailers;
   }
 
   Future<DataMovie> getComingsoonMovie() async {

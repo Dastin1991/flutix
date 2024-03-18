@@ -13,6 +13,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(HomeLoading());
 
       try {
+        print('bloc home');
         final result = await api.getNowPlayingMovie();
         final upcoming = await api.getComingsoonMovie();
         emit(HomeLoaded(result.movie, upcoming.movie));

@@ -14,15 +14,16 @@ class Movie {
   final String posterPath;
   final double rating;
   final int voteCount;
+  final String? link_trailer;
 
-  Movie({
-    required this.title,
-    required this.backDropPath,
-    required this.overview,
-    required this.posterPath,
-    required this.rating,
-    required this.voteCount,
-  });
+  Movie(
+      {required this.title,
+      required this.backDropPath,
+      required this.overview,
+      required this.posterPath,
+      required this.rating,
+      required this.voteCount,
+      this.link_trailer});
 
   factory Movie.fromModel(Map<String, dynamic> json) {
     return Movie(
@@ -32,6 +33,7 @@ class Movie {
       posterPath: json['poster_path'],
       rating: json['vote_average'],
       voteCount: json['vote_count'],
+      link_trailer: json['key'],
     );
   }
 
