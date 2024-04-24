@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         '/movieDetail': (_) => const MovieDetail(),
         '/chooseDate': (_) => const ChooseDate(),
         '/chooseRow': (_) => const ChooseRow(),
-        '/checkoutMovie': (_) => CheckoutMovie(),
+        '/checkoutMovie': (_) => const CheckoutMovie(),
         '/checkoutSuccess': (_) => const CheckoutSuccess(),
         '/profile': (_) => const Profile(),
         '/changeProfile': (_) => const ChangeProfile(),

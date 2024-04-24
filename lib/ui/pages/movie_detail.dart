@@ -32,21 +32,13 @@ class _MovieDetailState extends State<MovieDetail> {
       Crew(name: 'Tom Holland', profile: 'assets/images/crew_5.png'),
     ];
 
-    YoutubePlayerController _controller = YoutubePlayerController(
-      initialVideoId: 'qQ1hpNh24Wo',
-      flags: const YoutubePlayerFlags(
-        autoPlay: true,
-        mute: true,
-      ),
-    );
-
     if (arg is MoviePlaying) {
       movie = arg;
     }
 
     return BlocProvider(
-      create: (context) =>
-          MovieDetailBloc(api: Api())..add(LoadMovieDetail('1011985')),
+      create: (context) => MovieDetailBloc(api: Api())
+        ..add(LoadMovieDetail(movie!.id.toString())),
       child: SafeArea(
         child: (Scaffold(
           body: movie != null
@@ -205,26 +197,55 @@ class _MovieDetailState extends State<MovieDetail> {
                                   }));
                                 } else if (state is MovieDetailLoaded) {
                                   final data = state.movieTrailers;
-                                  return ListView.builder(
-                                    itemCount: data.length,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                        child: YoutubePlayer(
-                                          controller: _controller,
-                                          showVideoProgressIndicator: true,
-                                          progressIndicatorColor: Colors.amber,
-                                          progressColors:
-                                              const ProgressBarColors(
-                                            playedColor: Colors.amber,
-                                            handleColor: Colors.amberAccent,
-                                          ),
-                                          // onReady: () {
-                                          //   _controller.addListener(listener);
-                                          // },
-                                        ),
-                                      );
-                                    },
-                                  );
+                                  print(data.length);
+                                  return (YoutubePlayer(
+                                    controller: YoutubePlayerController(
+                                      initialVideoId: data[0]
+                                          .key, // Assuming key holds the YouTube video ID
+                                      flags: const YoutubePlayerFlags(
+                                        autoPlay: false,
+                                        mute: false,
+                                      ),
+                                    ),
+                                    showVideoProgressIndicator: true,
+                                    progressIndicatorColor: Colors.amber,
+                                    progressColors: const ProgressBarColors(
+                                      playedColor: Colors.amber,
+                                      handleColor: Colors.amberAccent,
+                                    ),
+                                  ));
+                                  // return Expanded(
+                                  //   child: ListView.builder(
+                                  //     scrollDirection: Axis.horizontal,
+                                  //     itemCount: 3,
+                                  //     itemBuilder: (context, index) {
+                                  //       final movieTrailer = data[index];
+                                  //       return GestureDetector(
+                                  //         onTap: () {
+                                  //           // Handle onTap if needed
+                                  //         },
+                                  //         child: YoutubePlayer(
+                                  //           controller: YoutubePlayerController(
+                                  //             initialVideoId: movieTrailer
+                                  //                 .key, // Assuming key holds the YouTube video ID
+                                  //             flags: const YoutubePlayerFlags(
+                                  //               autoPlay: false,
+                                  //               mute: false,
+                                  //             ),
+                                  //           ),
+                                  //           showVideoProgressIndicator: true,
+                                  //           progressIndicatorColor:
+                                  //               Colors.amber,
+                                  //           progressColors:
+                                  //               const ProgressBarColors(
+                                  //             playedColor: Colors.amber,
+                                  //             handleColor: Colors.amberAccent,
+                                  //           ),
+                                  //         ),
+                                  //       );
+                                  //     },
+                                  //   ),
+                                  // );
                                 } else {
                                   return Container(); // Handle other states if needed
                                 }

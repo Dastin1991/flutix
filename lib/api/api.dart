@@ -14,7 +14,7 @@ import 'package:intl/intl.dart';
 class Api {
   final playingApiUrl = "/movie/now_playing?api_key=$apiKey";
   final upComingApiUrl = "/movie/upcoming?api_key=$apiKey";
-  final videoApiUrl = "/movie/1011985/videos?api_key=$apiKey";
+  // final videoApiUrl = "/movie/1011985/videos?api_key=$apiKey";
 
   final dio = Dio(BaseOptions(baseUrl: 'https://api.themoviedb.org/3'));
 
@@ -24,12 +24,20 @@ class Api {
   }
 
   Future<List<MovieTrailer>> getVideoMovies(String id) async {
-    print('idnya $id');
+    final videoApiUrl = "/movie/$id/videos?api_key=$apiKey";
+    print(videoApiUrl);
     final response = await dio.get(videoApiUrl);
-    final List<dynamic> data =
-        response.data; // Assuming the response data is a list
-    final List<MovieTrailer> trailers =
-        data.map((item) => MovieTrailer.fromJson(item)).toList();
+
+    // Check if response.data is already decoded, otherwise decode it
+    final dynamic responseData =
+        response.data is String ? json.decode(response.data) : response.data;
+
+    final List<dynamic> results = responseData['results'];
+
+    final List<MovieTrailer> trailers = results
+        .map((item) => MovieTrailer.fromJson(item as Map<String, dynamic>))
+        .toList();
+
     return trailers;
   }
 

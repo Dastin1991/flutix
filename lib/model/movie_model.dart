@@ -8,33 +8,32 @@ class DataMovie {
 }
 
 class Movie {
+  final int id;
   final String title;
   final String backDropPath;
   final String overview;
   final String posterPath;
   final double rating;
   final int voteCount;
-  final String? link_trailer;
 
   Movie(
-      {required this.title,
+      {required this.id,
+      required this.title,
       required this.backDropPath,
       required this.overview,
       required this.posterPath,
       required this.rating,
-      required this.voteCount,
-      this.link_trailer});
+      required this.voteCount});
 
   factory Movie.fromModel(Map<String, dynamic> json) {
     return Movie(
-      title: json['title'],
-      backDropPath: json['backdrop_path'],
-      overview: json['overview'],
-      posterPath: json['poster_path'],
-      rating: json['vote_average'],
-      voteCount: json['vote_count'],
-      link_trailer: json['key'],
-    );
+        id: json['id'],
+        title: json['title'],
+        backDropPath: json['backdrop_path'],
+        overview: json['overview'],
+        posterPath: json['poster_path'],
+        rating: json['vote_average'],
+        voteCount: json['vote_count']);
   }
 
   // Map<String, dynamic> toMap() {

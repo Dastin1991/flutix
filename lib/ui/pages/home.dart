@@ -123,18 +123,25 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     List<MoviePlaying> category = [
       MoviePlaying(
+          id: 1,
           title: 'Action',
           rating: 7,
           star: 4,
           link: 'assets/images/ic_action.png'),
       MoviePlaying(
-          title: 'War', rating: 7, star: 3, link: 'assets/images/ic_war.png'),
+          id: 2,
+          title: 'War',
+          rating: 7,
+          star: 3,
+          link: 'assets/images/ic_war.png'),
       MoviePlaying(
+          id: 3,
           title: 'Drama',
           rating: 7,
           star: 3,
           link: 'assets/images/ic_drama.png'),
       MoviePlaying(
+          id: 4,
           title: 'Music',
           rating: 7,
           star: 3,
@@ -271,8 +278,11 @@ class _HomePageState extends State<HomePage> {
                               );
                             } else if (state is HomeLoaded) {
                               final data = state.movies;
+                              double screenWidth =
+                                  MediaQuery.of(context).size.width;
+
                               return SizedBox(
-                                width: 500,
+                                width: screenWidth,
                                 height: 140,
                                 child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
@@ -286,6 +296,7 @@ class _HomePageState extends State<HomePage> {
                                       final formattedRating =
                                           formatter.format(rating);
                                       final MoviePlaying movie = MoviePlaying(
+                                          id: data[index].id,
                                           title: data[index].title,
                                           rating: double.parse(formattedRating),
                                           star: 5,
@@ -391,6 +402,7 @@ class _HomePageState extends State<HomePage> {
                                   itemCount: data.length,
                                   itemBuilder: (context, index) {
                                     final MoviePlaying movie = MoviePlaying(
+                                        id: data[index].id,
                                         title: data[index].title,
                                         rating: data[index].rating,
                                         star: 5,

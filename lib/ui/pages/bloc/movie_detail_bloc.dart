@@ -14,7 +14,6 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
       emit(MovieDetailLoading());
 
       try {
-        print('bloc movie detail');
         final result = await api.getVideoMovies(event.id);
         emit(MovieDetailLoaded(result));
       } catch (error) {

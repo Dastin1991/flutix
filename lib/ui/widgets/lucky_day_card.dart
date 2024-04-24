@@ -12,9 +12,12 @@ class LuckyDayCard extends StatelessWidget {
       alignment: Alignment.centerLeft,
       children: [
         SizedBox(
-          width: screenSize.width,
+          width: double.infinity,
           height: 100,
-          child: Image.asset('assets/images/bg.png'),
+          child: Image.asset(
+            'assets/images/bg.png',
+            fit: BoxFit.cover,
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(22.0),

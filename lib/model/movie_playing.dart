@@ -1,4 +1,5 @@
 class MoviePlaying {
+  int id;
   String title;
   double rating;
   int star;
@@ -6,6 +7,7 @@ class MoviePlaying {
   String? overview;
 
   MoviePlaying({
+    required this.id,
     required this.title,
     required this.rating,
     required this.star,

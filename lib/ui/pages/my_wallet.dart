@@ -169,8 +169,13 @@ class _MyWalletState extends State<MyWallet> {
                     Header(title: 'My Wallet'),
                     Stack(
                       children: [
-                        const Image(
-                            image: AssetImage('assets/images/bg_card.png')),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 250,
+                          child: const Image(
+                              fit: BoxFit.cover,
+                              image: AssetImage('assets/images/bg_card.png')),
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(32.0),
                           child: Row(
