@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Init extends StatefulWidget {
@@ -22,15 +23,10 @@ class _InitState extends State<Init> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     bool? isLogin = prefs.getBool('isLogin');
-    String? email = prefs.getString('email');
-    String? fullname = prefs.getString('fullname');
-    print(fullname);
     if (isLogin != null && isLogin) {
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
-          arguments: {'selectedIndex': 0});
+      context.goNamed('home');
     } else {
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/onBoarding', (route) => false);
+      context.goNamed('onboarding');
     }
   }
 

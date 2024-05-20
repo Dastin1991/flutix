@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -212,7 +213,8 @@ class _SignUpState extends State<SignUp> {
           photo: pathUrl,
           password: password,
           pathImage: _image);
-      Navigator.pushNamed(context, '/genre', arguments: users);
+      context.goNamed('genre', extra: users);
+      // Navigator.pushNamed(context, '/genre', arguments: users);
     }
   }
 

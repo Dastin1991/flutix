@@ -8,10 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CinemaTile extends StatefulWidget {
   final Cinema cinemas;
   final CinemaTime cinemaTime;
+  final String? selectedDate;
   final Function onTap;
 
   CinemaTile(
       {Key? key,
+      this.selectedDate,
       required this.cinemas,
       required this.onTap,
       required this.cinemaTime})
@@ -55,6 +57,7 @@ class _CinemaTileState extends State<CinemaTile> {
               children: List.generate(
                   widget.cinemas.times.length,
                   (index) => TimeTile(
+                      date: widget.selectedDate,
                       time: widget.cinemas.times[index].time,
                       selected: widget.cinemaTime == widget.cinemas.times[index]
                           ? true

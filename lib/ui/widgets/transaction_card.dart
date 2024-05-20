@@ -3,6 +3,7 @@ import 'package:flutix/model/ticket.dart';
 import 'package:flutix/model/transaction.dart';
 import 'package:flutix/services/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class TransactionCard extends StatelessWidget {
   final Transactions transactions;
@@ -23,7 +24,7 @@ class TransactionCard extends StatelessWidget {
         },
         child: (SizedBox(
           width: double.infinity,
-          height: 90,
+          height: 100,
           child: Row(
             children: [
               SizedBox(
@@ -65,12 +66,15 @@ class TransactionCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    transactions.title,
-                    style: const TextStyle(
-                        fontFamily: 'Raleway',
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500),
+                  Container(
+                    width: 240,
+                    child: Text(
+                      transactions.title,
+                      style: const TextStyle(
+                          fontFamily: 'Raleway',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
                   Text(
                     Utils.format(transactions.total!),

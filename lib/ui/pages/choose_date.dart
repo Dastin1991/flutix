@@ -20,14 +20,6 @@ class ChooseDate extends StatefulWidget {
 }
 
 class _ChooseDateState extends State<ChooseDate> {
-  // List<Dates> dates = [
-  //   Dates(date: '21', day: 'SAT'),
-  //   Dates(date: '22', day: 'SUN'),
-  //   Dates(date: '23', day: 'MON'),
-  //   Dates(date: '24', day: 'TUE'),
-  //   Dates(date: '25', day: 'WED'),
-  // ];
-
   List<Dates> dates = Utils.generateDatesForWeek(DateTime.now());
 
   List<Cinema> cinemas = [
@@ -82,7 +74,6 @@ class _ChooseDateState extends State<ChooseDate> {
   List<String> selectedDate = <String>[];
   List<String> selectedTime = <String>[];
   Dates _selectedDate = Dates(date: "", day: "", fulldate: "");
-  // CinemaTime _cinemaTime = CinemaTime(id: 0, cinemaName: "", time: "")
   int timeId = 0;
   CinemaTime cinemaTimeSelected = CinemaTime(id: 0, cinemaName: "", time: "");
   CinemaTicket _cinemaTicket = CinemaTicket();
@@ -149,6 +140,7 @@ class _ChooseDateState extends State<ChooseDate> {
                           (index) => CinemaTile(
                                 cinemas: cinemas[index],
                                 cinemaTime: cinemaTimeSelected,
+                                selectedDate: _selectedDate.fulldate,
                                 onTap: (selectedCinemaTime) {
                                   _onSelectedTime(selectedCinemaTime);
                                 },

@@ -13,7 +13,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class ConfirmAccount extends StatefulWidget {
   UserProfile? users;
-  ConfirmAccount({Key? key, this.users});
+  ConfirmAccount({super.key, this.users});
 
   @override
   State<ConfirmAccount> createState() => _ConfirmAccountState();
@@ -22,29 +22,29 @@ class ConfirmAccount extends StatefulWidget {
 class _ConfirmAccountState extends State<ConfirmAccount> {
   final AuthServices _auth = AuthServices();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  String fullname = "";
 
   @override
   void initState() {
     // TODO: implement initState
-    checkSharedPreferences();
+    // checkSharedPreferences();
     super.initState();
   }
 
-  Future<void> checkSharedPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  // Future<void> checkSharedPreferences() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String? _fullname = prefs.getString('fullname');
-    setState(() {
-      fullname = _fullname!;
-    });
-  }
+  //   String? fullname = prefs.getString('fullname');
+  //   print(fullname);
+  //   setState(() {
+  //     fullname = fullname!;
+  //   });
+  // }
 
   Future<void> createAccount(UserProfile userProfile) async {
-    String username = userProfile.fullname;
-    String email = userProfile.email;
+    String username = userProfile!.fullname;
+    String email = userProfile!.email;
     String password = userProfile!.password!;
-    File? _image = userProfile?.pathImage ?? userProfile?.pathImage;
+    File? _image = userProfile!.pathImage ?? userProfile!.pathImage;
     String? _imageUrl = "";
     String userId = "";
     try {
@@ -58,11 +58,10 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
         users
             .doc(userId)
             .set({
-              'fullname': username, // John Doe
+              'fullname': username,
               'email': email,
               'genre': userProfile.genre,
               'language': userProfile.language,
-              // John Doe
             })
             .then((value) => {
                   users.doc(userId).collection('ewallet').add(

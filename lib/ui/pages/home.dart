@@ -164,12 +164,259 @@ class _HomePageState extends State<HomePage> {
     return (BlocProvider(
       create: (context) => HomeBloc(api: Api())..add(LoadHome()),
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.only(
+                    top: 130), // Adjust top padding to accommodate the stack
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TextCustom(title: 'Now Playing'),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          SizedBox(
+                            height: 140,
+                            child: SingleChildScrollView(
+                              // scrollDirection: Axis.horizontal,
+                              child: BlocBuilder<HomeBloc, HomeState>(
+                                builder: (context, state) {
+                                  if (state is HomeLoading) {
+                                    return Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 140,
+                                          child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: 3, // Number of banners
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: SizedBox(
+                                                  width: 210,
+                                                  height: 140,
+                                                  child: Shimmer.fromColors(
+                                                    baseColor:
+                                                        Colors.grey.shade300,
+                                                    highlightColor:
+                                                        Colors.grey.shade100,
+                                                    enabled: true,
+                                                    child: BannerPlaceholder(),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  } else if (state is HomeLoaded) {
+                                    final data = state.movies;
+                                    double screenWidth =
+                                        MediaQuery.of(context).size.width;
+
+                                    return SizedBox(
+                                      width: screenWidth,
+                                      height: 140,
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: data.length,
+                                          itemBuilder: (context, index) {
+                                            final double rating =
+                                                data[index].rating;
+
+                                            // Format the rating with one decimal place and comma separator
+                                            final NumberFormat formatter =
+                                                NumberFormat(
+                                                    "#,##0.0", "en_US");
+                                            final formattedRating =
+                                                formatter.format(rating);
+                                            final MoviePlaying movie = MoviePlaying(
+                                                id: data[index].id,
+                                                title: data[index].title,
+                                                rating: double.parse(
+                                                    formattedRating),
+                                                star: 5,
+                                                overview: data[index].overview,
+                                                link:
+                                                    "https://image.tmdb.org/t/p/original${data[index].posterPath}");
+                                            return MovieCard(
+                                              movie: movie,
+                                              onTap: () {
+                                                handlerClickMovie(
+                                                    context, movie);
+                                              },
+                                            );
+                                          }),
+                                    );
+                                  } else if (state is HomeError) {
+                                    return Center(child: Text(state.error));
+                                  }
+                                  return Container();
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TextCustom(title: 'Browse Movie'),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: List.generate(
+                                category.length,
+                                (index) => CategoryCard(
+                                      movie: category[index],
+                                    )),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TextCustom(title: 'Coming Soon'),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          SingleChildScrollView(
+                            child: BlocBuilder<HomeBloc, HomeState>(
+                              builder: (context, state) {
+                                if (state is HomeLoading) {
+                                  return Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 140,
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: 3,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: SizedBox(
+                                                width: 100,
+                                                height: 140,
+                                                child: Shimmer.fromColors(
+                                                  baseColor:
+                                                      Colors.grey.shade300,
+                                                  highlightColor:
+                                                      Colors.grey.shade100,
+                                                  enabled: true,
+                                                  child:
+                                                      ComingSoonPlaceholder(),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                } else if (state is HomeLoaded) {
+                                  final data = state.upcoming;
+                                  return SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 140,
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: data.length,
+                                        itemBuilder: (context, index) {
+                                          final MoviePlaying movie = MoviePlaying(
+                                              id: data[index].id,
+                                              title: data[index].title,
+                                              rating: data[index].rating,
+                                              star: 5,
+                                              overview: data[index].overview,
+                                              link:
+                                                  "https://image.tmdb.org/t/p/original${data[index].posterPath}");
+                                          return ComingsoonCard(
+                                              movie: movie,
+                                              onTap: () {
+                                                handlerClickMovie(
+                                                    context, movie);
+                                              });
+                                        }),
+                                  );
+                                } else if (state is HomeError) {
+                                  return Center(child: Text(state.error));
+                                }
+                                return Container();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TextCustom(title: 'Get Lucky Day'),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Wrap(
+                              alignment: WrapAlignment.start,
+                              runSpacing: 8,
+                              children: List.generate(
+                                  luckyDay.length,
+                                  (index) => LuckyDayCard(
+                                        luckyDay: luckyDay[index],
+                                      )),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
                 padding: const EdgeInsets.only(top: 30),
                 width: double.infinity,
                 height: 144,
@@ -228,234 +475,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TextCustom(title: 'Now Playing'),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    SizedBox(
-                      height: 140,
-                      child: SingleChildScrollView(
-                        // scrollDirection: Axis.horizontal,
-                        child: BlocBuilder<HomeBloc, HomeState>(
-                          builder: (context, state) {
-                            if (state is HomeLoading) {
-                              return Column(
-                                children: [
-                                  SizedBox(
-                                    height: 140,
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: 3, // Number of banners
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: SizedBox(
-                                            width: 210,
-                                            height: 140,
-                                            child: Shimmer.fromColors(
-                                              baseColor: Colors.grey.shade300,
-                                              highlightColor:
-                                                  Colors.grey.shade100,
-                                              enabled: true,
-                                              child: BannerPlaceholder(),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              );
-                            } else if (state is HomeLoaded) {
-                              final data = state.movies;
-                              double screenWidth =
-                                  MediaQuery.of(context).size.width;
-
-                              return SizedBox(
-                                width: screenWidth,
-                                height: 140,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: data.length,
-                                    itemBuilder: (context, index) {
-                                      final double rating = data[index].rating;
-
-// Format the rating with one decimal place and comma separator
-                                      final NumberFormat formatter =
-                                          NumberFormat("#,##0.0", "en_US");
-                                      final formattedRating =
-                                          formatter.format(rating);
-                                      final MoviePlaying movie = MoviePlaying(
-                                          id: data[index].id,
-                                          title: data[index].title,
-                                          rating: double.parse(formattedRating),
-                                          star: 5,
-                                          overview: data[index].overview,
-                                          link:
-                                              "https://image.tmdb.org/t/p/original${data[index].posterPath}");
-                                      return MovieCard(
-                                        movie: movie,
-                                        onTap: () {
-                                          handlerClickMovie(context, movie);
-                                        },
-                                      );
-                                    }),
-                              );
-                            } else if (state is HomeError) {
-                              return Center(child: Text(state.error));
-                            }
-                            return Container();
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TextCustom(title: 'Browse Movie'),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: List.generate(
-                          category.length,
-                          (index) => CategoryCard(
-                                movie: category[index],
-                              )),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TextCustom(title: 'Coming Soon'),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    SingleChildScrollView(
-                      child: BlocBuilder<HomeBloc, HomeState>(
-                        builder: (context, state) {
-                          if (state is HomeLoading) {
-                            return Column(
-                              children: [
-                                SizedBox(
-                                  height: 140,
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: 3,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: SizedBox(
-                                          width: 100,
-                                          height: 140,
-                                          child: Shimmer.fromColors(
-                                            baseColor: Colors.grey.shade300,
-                                            highlightColor:
-                                                Colors.grey.shade100,
-                                            enabled: true,
-                                            child: ComingSoonPlaceholder(),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            );
-                          } else if (state is HomeLoaded) {
-                            final data = state.upcoming;
-                            return SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 140,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: data.length,
-                                  itemBuilder: (context, index) {
-                                    final MoviePlaying movie = MoviePlaying(
-                                        id: data[index].id,
-                                        title: data[index].title,
-                                        rating: data[index].rating,
-                                        star: 5,
-                                        overview: data[index].overview,
-                                        link:
-                                            "https://image.tmdb.org/t/p/original${data[index].posterPath}");
-                                    return ComingsoonCard(
-                                        movie: movie,
-                                        onTap: () {
-                                          handlerClickMovie(context, movie);
-                                        });
-                                  }),
-                            );
-                          } else if (state is HomeError) {
-                            return Center(child: Text(state.error));
-                          }
-                          return Container();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TextCustom(title: 'Get Lucky Day'),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Wrap(
-                        alignment: WrapAlignment.start,
-                        runSpacing: 8,
-                        children: List.generate(
-                            luckyDay.length,
-                            (index) => LuckyDayCard(
-                                  luckyDay: luckyDay[index],
-                                )),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     ));

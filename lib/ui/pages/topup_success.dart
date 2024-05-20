@@ -45,7 +45,11 @@ class TopUpSuccess extends StatelessWidget {
                             backgroundColor: const Color(0xff503E9D),
                             foregroundColor: Colors.white),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/myWallet');
+                          // Navigator.pushNamed(context, '/myWallet');
+                          Navigator.popUntil(
+                              context, ModalRoute.withName('/myWallet'));
+                          // Navigator.pushNamedAndRemoveUntil(
+                          //     context, '/myWallet', (_) => false);
                         },
                         child: const Text("My Wallet"))),
               ),

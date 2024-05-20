@@ -155,7 +155,8 @@ class _TopUpState extends State<TopUp> {
           'price': '',
           'fee': '',
           'type': 'topup',
-          'total': amountController.text
+          'total': amountController.text,
+          'created_dt': dateTime
         }).then((_) async {
           print("User and wallet added successfully");
 

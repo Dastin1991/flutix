@@ -53,7 +53,6 @@ class _ChooseRowState extends State<ChooseRow> {
   ];
 
   List<String> selectedSeat = <String>[];
-  List<String> _selectedSeat = <String>[];
   List<Sheet> seatSelected = [];
 
   @override
@@ -115,7 +114,7 @@ class _ChooseRowState extends State<ChooseRow> {
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15,
                       ),
                       Row(

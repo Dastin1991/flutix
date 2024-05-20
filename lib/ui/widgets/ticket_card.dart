@@ -32,12 +32,15 @@ class TicketCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  ticket.title,
-                  style: const TextStyle(
-                      fontFamily: 'Raleway',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500),
+                SizedBox(
+                  width: 240,
+                  child: Text(
+                    ticket.title,
+                    style: const TextStyle(
+                        fontFamily: 'Raleway',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500),
+                  ),
                 ),
                 Text(
                   ticket.genre,

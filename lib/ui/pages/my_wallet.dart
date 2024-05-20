@@ -317,23 +317,6 @@ class _MyWalletState extends State<MyWallet> {
                       padding: EdgeInsets.only(left: 24.0),
                       child: Text("Recent Transactions"),
                     ),
-                    // Expanded(
-                    //   child: SingleChildScrollView(
-                    //     child: Wrap(
-                    //       spacing: 10,
-                    //       runSpacing: 10,
-                    //       children: List.generate(
-                    //         transaction.length,
-                    //         (index) => TransactionCard(
-                    //           transactions: transaction[index],
-                    //           onTap: () {
-                    //             handlerClickTrans(context, transaction[index]);
-                    //           },
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     Expanded(
                       child: BlocBuilder<MyWalletBloc, MyWalletState>(
                         builder: (context, state) {

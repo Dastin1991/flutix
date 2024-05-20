@@ -3,10 +3,11 @@ import 'package:flutix/ui/widgets/genre_tile.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class Genre extends StatefulWidget {
   UserProfile? users;
-  Genre({Key? key, this.users});
+  Genre({super.key, this.users});
 
   @override
   State<Genre> createState() => _GenreState();
@@ -31,6 +32,24 @@ class _GenreState extends State<Genre> {
 
   List<String> selectedGenre = <String>[];
   List<String> selectedMovie = <String>[];
+
+  Future confirmAccount() async {
+    print('navigate to confirm account');
+    print(widget.users!.password);
+    List<String> selectedGenres =
+        selectedGenre.map((index) => myGenre[int.parse(index)]).toList();
+    List<String> selectedMovies =
+        selectedMovie.map((index) => myMovie[int.parse(index)]).toList();
+    UserProfile user = UserProfile(
+        fullname: widget.users!.fullname,
+        email: widget.users!.email,
+        pathImage: widget.users!.pathImage ?? widget.users!.pathImage,
+        password: widget.users!.password,
+        genre: selectedGenres.join(','),
+        language: selectedMovies.join(','));
+
+    context.goNamed('confirm', extra: user);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,22 +140,24 @@ class _GenreState extends State<Genre> {
                     ? true
                     : false,
                 onTap: () {
-                  List<String> selectedGenres = selectedGenre
-                      .map((index) => myGenre[int.parse(index)])
-                      .toList();
-                  List<String> selectedMovies = selectedMovie
-                      .map((index) => myMovie[int.parse(index)])
-                      .toList();
-                  print(selectedGenres);
-                  UserProfile users = UserProfile(
-                      fullname: userProfile!.fullname,
-                      email: userProfile!.email,
-                      pathImage:
-                          userProfile?.pathImage ?? userProfile.pathImage,
-                      password: userProfile.password,
-                      genre: selectedGenres.join(','),
-                      language: selectedMovies.join(','));
-                  Navigator.pushNamed(context, '/confirm', arguments: users);
+                  // List<String> selectedGenres = selectedGenre
+                  //     .map((index) => myGenre[int.parse(index)])
+                  //     .toList();
+                  // List<String> selectedMovies = selectedMovie
+                  //     .map((index) => myMovie[int.parse(index)])
+                  //     .toList();
+                  // UserProfile users = UserProfile(
+                  //     fullname: userProfile!.fullname,
+                  //     email: userProfile!.email,
+                  //     pathImage:
+                  //         userProfile?.pathImage ?? userProfile.pathImage,
+                  //     password: userProfile.password,
+                  //     genre: selectedGenres.join(','),
+                  //     language: selectedMovies.join(','));
+                  // Navigator.pushNamed(context, '/confirm', arguments: users);
+                  // // context.goNamed('confirm', extra: users);
+                  // print('navigate to confirm account');
+                  confirmAccount();
                 },
               )
             ],

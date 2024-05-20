@@ -27,13 +27,13 @@ class Movie {
 
   factory Movie.fromModel(Map<String, dynamic> json) {
     return Movie(
-        id: json['id'],
-        title: json['title'],
-        backDropPath: json['backdrop_path'],
-        overview: json['overview'],
-        posterPath: json['poster_path'],
-        rating: json['vote_average'],
-        voteCount: json['vote_count']);
+        id: json['id'] ?? 1,
+        title: json['title'] ?? "",
+        backDropPath: json['backdrop_path'] ?? "",
+        overview: json['overview'] ?? "",
+        posterPath: json['poster_path'] ?? "",
+        rating: json['vote_average'] ?? "",
+        voteCount: json['vote_count'] ?? 1);
   }
 
   // Map<String, dynamic> toMap() {

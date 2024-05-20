@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class OnBoarding extends StatelessWidget {
   const OnBoarding({Key? key}) : super(key: key);
@@ -58,7 +59,8 @@ class OnBoarding extends StatelessWidget {
                             backgroundColor: const Color(0xff503E9D),
                             foregroundColor: Colors.white),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/signup');
+                          debugPrint('go to signup');
+                          context.goNamed('signup');
                         },
                         child: const Text("Get Started"))),
                 const SizedBox(
@@ -78,7 +80,7 @@ class OnBoarding extends StatelessWidget {
                       width: 6,
                     ),
                     InkWell(
-                      onTap: () => Navigator.pushNamed(context, '/signin'),
+                      onTap: () => context.goNamed('signin'),
                       child: const Text(
                         "Sign In",
                         style: TextStyle(

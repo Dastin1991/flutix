@@ -114,7 +114,7 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
 
       if (userSnapshot.exists) {
         final String userId = userSnapshot.id;
-
+        DateTime dateTime = DateTime.now();
         CollectionReference users = firestore.collection("users");
 
         users.doc(userId).collection('transactions').add({
@@ -128,7 +128,8 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
           'seat': transactions.seat,
           'price': transactions.price,
           'fee': transactions.fee,
-          'total': transactions.total
+          'total': transactions.total,
+          'created_dt': dateTime
         }).then((_) async {
           CollectionReference ewalletCollection =
               userSnapshot.reference.collection('ewallet');
