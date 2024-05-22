@@ -8,6 +8,7 @@ import 'package:flutix/ui/widgets/placeholders.dart';
 import 'package:flutix/ui/widgets/transaction_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
@@ -399,7 +400,7 @@ class _MyWalletState extends State<MyWallet> {
 }
 
 void handlerClickTrans(BuildContext context, Transactions transactions) {
-  print(transactions.date);
-  if (transactions.type != 'topup')
-    Navigator.pushNamed(context, '/ticketDetail', arguments: transactions);
+  if (transactions.type != 'topup') {
+    context.goNamed('ticketDetail', extra: transactions);
+  }
 }

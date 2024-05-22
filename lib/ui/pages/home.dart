@@ -16,6 +16,7 @@ import 'package:flutix/ui/widgets/text_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
@@ -436,7 +437,7 @@ class _HomePageState extends State<HomePage> {
                           width: 64,
                           child: GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(context, '/profile');
+                              context.goNamed('profile');
                             },
                             child: profile_url.isNotEmpty
                                 ? CircleAvatar(
@@ -483,6 +484,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-void handlerClickMovie(BuildContext context, MoviePlaying movie) {
-  Navigator.pushNamed(context, '/movieDetail', arguments: movie);
+void handlerClickMovie(BuildContext context, MoviePlaying movies) {
+  context.goNamed('movieDetail', extra: movies);
 }

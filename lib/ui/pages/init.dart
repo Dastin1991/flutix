@@ -13,6 +13,7 @@ class _InitState extends State<Init> {
   bool isLogin = false;
   bool isStarted = false;
   String cek = "";
+
   @override
   void initState() {
     checkSharedPreferences();
@@ -24,7 +25,7 @@ class _InitState extends State<Init> {
 
     bool? isLogin = prefs.getBool('isLogin');
     if (isLogin != null && isLogin) {
-      context.goNamed('home');
+      context.goNamed('home', queryParameters: {'index': '0'});
     } else {
       context.goNamed('onboarding');
     }

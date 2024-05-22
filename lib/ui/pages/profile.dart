@@ -1,6 +1,7 @@
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutix/ui/widgets/separator.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
@@ -99,7 +100,7 @@ class _ProfileState extends State<Profile> {
                     children: [
                       GestureDetector(
                         onTap: (() {
-                          Navigator.pushNamed(context, '/changeProfile');
+                          context.goNamed('change_profile');
                         }),
                         child: const Row(
                           children: [
@@ -124,8 +125,7 @@ class _ProfileState extends State<Profile> {
                       ),
                       const Separator(),
                       GestureDetector(
-                        onTap: (() =>
-                            Navigator.pushNamed(context, '/myWallet')),
+                        onTap: (() => context.goNamed('mywallet')),
                         child: const Row(
                           children: [
                             Image(

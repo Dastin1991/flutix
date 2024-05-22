@@ -7,6 +7,7 @@ import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutix/ui/widgets/loading_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckoutMovie extends StatefulWidget {
@@ -155,8 +156,7 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
             print('No ewallet document found for user with email: $email');
           }
           Navigator.of(context).pop();
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/checkoutSuccess', (route) => false);
+          context.goNamed('checkoutSuccess');
         }).catchError((error) {
           print("Failed to add wallet: $error");
         });
@@ -182,14 +182,8 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
 
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings.arguments;
-    CinemaTicket? cinemaTicket;
-    if (arg is CinemaTicket) {
-      cinemaTicket = arg;
-    }
-    print(cinemaTicket!.idOrder);
     return Scaffold(
-      body: cinemaTicket != null
+      body: widget.cinemaTicket != null
           ? SafeArea(
               child: Column(
                 children: [
@@ -203,7 +197,8 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Image(
-                                image: NetworkImage(cinemaTicket.movie!.link),
+                                image: NetworkImage(
+                                    widget.cinemaTicket!.movie!.link),
                                 width: 70,
                                 height: 90,
                                 fit: BoxFit.cover,
@@ -214,7 +209,7 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(cinemaTicket.movie!.title),
+                                  Text(widget.cinemaTicket!.movie!.title),
                                   const Text(
                                     'Action - English',
                                     style: TextStyle(color: Color(0xFFADADAD)),
@@ -236,7 +231,7 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'ID Order',
                               style: TextStyle(
                                   fontFamily: 'Raleway',
@@ -254,7 +249,7 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
                                   fontFamily: 'Raleway',
                                   color: Color(0xFFADADAD)),
                             ),
-                            Text(cinemaTicket.cinema.toString())
+                            Text(widget.cinemaTicket!.cinema.toString())
                           ],
                         ),
                         Row(
@@ -266,7 +261,8 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
                                   fontFamily: 'Raleway',
                                   color: Color(0xFFADADAD)),
                             ),
-                            Text("${cinemaTicket.date} ${cinemaTicket.time}")
+                            Text(
+                                "${widget.cinemaTicket!.date} ${widget.cinemaTicket!.time}")
                           ],
                         ),
                         Row(
@@ -278,7 +274,7 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
                                   fontFamily: 'Raleway',
                                   color: Color(0xFFADADAD)),
                             ),
-                            Text(cinemaTicket.seatNumber.toString())
+                            Text(widget.cinemaTicket!.seatNumber.toString())
                           ],
                         ),
                         Row(
@@ -290,7 +286,7 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
                                   fontFamily: 'Raleway',
                                   color: Color(0xFFADADAD)),
                             ),
-                            Text(cinemaTicket.price.toString())
+                            Text(widget.cinemaTicket!.price.toString())
                           ],
                         ),
                         Row(
@@ -302,7 +298,7 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
                                   fontFamily: 'Raleway',
                                   color: Color(0xFFADADAD)),
                             ),
-                            Text(cinemaTicket.fee.toString())
+                            Text(widget.cinemaTicket!.fee.toString())
                           ],
                         ),
                         Row(
@@ -314,8 +310,8 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
                                   fontFamily: 'Raleway',
                                   color: Color(0xFFADADAD)),
                             ),
-                            Text(Utils.format(
-                                int.parse(cinemaTicket.total.toString())))
+                            Text(Utils.format(int.parse(
+                                widget.cinemaTicket!.total.toString())))
                           ],
                         ),
                         const SizedBox(
@@ -360,19 +356,21 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
                                     onPressed: () {
                                       final Transactions trans = Transactions(
                                         id: int.parse(orderId!),
-                                        title: cinemaTicket!.movie!.title,
-                                        amount: cinemaTicket.total.toString(),
-                                        description: cinemaTicket
-                                            .movie!.overview
+                                        title:
+                                            widget.cinemaTicket!.movie!.title,
+                                        amount: widget.cinemaTicket!.total
                                             .toString(),
-                                        link: cinemaTicket.movie!.link,
+                                        description: widget
+                                            .cinemaTicket!.movie!.overview
+                                            .toString(),
+                                        link: widget.cinemaTicket!.movie!.link,
                                         type: "movie",
-                                        cinema: cinemaTicket.cinema,
-                                        date: cinemaTicket.date,
-                                        seat: cinemaTicket.seatNumber,
-                                        price: cinemaTicket.price!,
-                                        fee: cinemaTicket.fee!,
-                                        total: cinemaTicket.total!,
+                                        cinema: widget.cinemaTicket!.cinema,
+                                        date: widget.cinemaTicket!.date,
+                                        seat: widget.cinemaTicket!.seatNumber,
+                                        price: widget.cinemaTicket!.price!,
+                                        fee: widget.cinemaTicket!.fee!,
+                                        total: widget.cinemaTicket!.total!,
                                       );
                                       showCustomDialog(context);
                                       createTicket(trans);
@@ -392,7 +390,7 @@ class _CheckoutMovieState extends State<CheckoutMovie> {
                                       foregroundColor: Colors.white,
                                     ),
                                     onPressed: () {
-                                      Navigator.pushNamed(context, '/topup');
+                                      context.goNamed('topup');
                                     },
                                     child: const Text("Top Up My Wallet"),
                                   ),

@@ -1,9 +1,10 @@
 import 'package:flutix/ui/pages/home.dart';
 import 'package:flutix/ui/pages/ticket.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class Menu extends StatefulWidget {
-  int selectedIndex = 1;
+  int selectedIndex = 0;
   Menu({required this.selectedIndex});
 
   @override
@@ -18,11 +19,11 @@ class _MenuState extends State<Menu> {
     HomePage(),
     Ticket(),
   ];
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class _MenuState extends State<Menu> {
           borderRadius: BorderRadius.circular(100),
           child: FloatingActionButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/topup');
+              context.goNamed('topup');
             },
             backgroundColor: Colors.amber[500],
             child: const Icon(Icons.download),
@@ -86,8 +87,8 @@ class _MenuState extends State<Menu> {
                       children: [
                         Image(
                           image: _selectedIndex == 1
-                              ? AssetImage('assets/images/ic_tickets.png')
-                              : AssetImage(
+                              ? const AssetImage('assets/images/ic_tickets.png')
+                              : const AssetImage(
                                   'assets/images/ic_movies_gray_ticket.png'),
                           width: 24,
                           height: 18,

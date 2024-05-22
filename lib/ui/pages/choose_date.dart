@@ -10,6 +10,7 @@ import 'package:flutix/ui/widgets/genre_tile.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ChooseDate extends StatefulWidget {
   final MoviePlaying? movie;
@@ -80,11 +81,6 @@ class _ChooseDateState extends State<ChooseDate> {
 
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings.arguments;
-    MoviePlaying? movie;
-    if (arg is MoviePlaying) {
-      movie = arg;
-    }
     return (Scaffold(
       body: SafeArea(
         child: Container(
@@ -132,20 +128,22 @@ class _ChooseDateState extends State<ChooseDate> {
                     const SizedBox(
                       height: 16,
                     ),
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: List.generate(
-                          cinemas.length,
-                          (index) => CinemaTile(
-                                cinemas: cinemas[index],
-                                cinemaTime: cinemaTimeSelected,
-                                selectedDate: _selectedDate.fulldate,
-                                onTap: (selectedCinemaTime) {
-                                  _onSelectedTime(selectedCinemaTime);
-                                },
-                              )),
-                    )
+                    _selectedDate.date != ''
+                        ? Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: List.generate(
+                                cinemas.length,
+                                (index) => CinemaTile(
+                                      cinemas: cinemas[index],
+                                      cinemaTime: cinemaTimeSelected,
+                                      selectedDate: _selectedDate.fulldate,
+                                      onTap: (selectedCinemaTime) {
+                                        _onSelectedTime(selectedCinemaTime);
+                                      },
+                                    )),
+                          )
+                        : Container()
                   ],
                 ),
               ),
@@ -158,12 +156,12 @@ class _ChooseDateState extends State<ChooseDate> {
                     : false,
                 onTap: () {
                   _cinemaTicket = CinemaTicket(
-                      movie: movie,
+                      movie: widget.movie,
                       date: "${_selectedDate.day} ${_selectedDate.date}",
                       time: cinemaTimeSelected.time,
                       cinema: cinemaTimeSelected.cinemaName);
-                  Navigator.pushNamed(context, '/chooseRow',
-                      arguments: _cinemaTicket);
+
+                  context.goNamed('chooseRow', extra: _cinemaTicket);
                 },
               )
             ],

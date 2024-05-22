@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class TopUpSuccess extends StatelessWidget {
   const TopUpSuccess({super.key});
@@ -45,11 +46,7 @@ class TopUpSuccess extends StatelessWidget {
                             backgroundColor: const Color(0xff503E9D),
                             foregroundColor: Colors.white),
                         onPressed: () {
-                          // Navigator.pushNamed(context, '/myWallet');
-                          Navigator.popUntil(
-                              context, ModalRoute.withName('/myWallet'));
-                          // Navigator.pushNamedAndRemoveUntil(
-                          //     context, '/myWallet', (_) => false);
+                          context.goNamed('my_wallet_home');
                         },
                         child: const Text("My Wallet"))),
               ),
@@ -59,20 +56,18 @@ class TopUpSuccess extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Discover new movie?",
                     style: TextStyle(fontSize: 14, color: Color(0xFFADADAD)),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/home', (route) => false,
-                          arguments: {'selectedIndex': 0});
+                      context.goNamed('home');
                     },
-                    child: Text(
+                    child: const Text(
                       "Back to Home",
                       style: TextStyle(fontSize: 14, color: Color(0xFF503E9D)),
                     ),

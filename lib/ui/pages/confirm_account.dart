@@ -8,6 +8,7 @@ import 'package:flutix/services/utils.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -40,11 +41,11 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
   //   });
   // }
 
-  Future<void> createAccount(UserProfile userProfile) async {
-    String username = userProfile!.fullname;
-    String email = userProfile!.email;
-    String password = userProfile!.password!;
-    File? _image = userProfile!.pathImage ?? userProfile!.pathImage;
+  Future<void> createAccount() async {
+    String username = widget.users!.fullname;
+    String email = widget.users!.email;
+    String password = widget.users!.password!;
+    File? _image = widget.users!.pathImage ?? widget.users!.pathImage;
     String? _imageUrl = "";
     String userId = "";
     try {
@@ -60,8 +61,8 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
             .set({
               'fullname': username,
               'email': email,
-              'genre': userProfile.genre,
-              'language': userProfile.language,
+              'genre': widget.users?.genre,
+              'language': widget.users?.language,
             })
             .then((value) => {
                   users.doc(userId).collection('ewallet').add(
@@ -111,8 +112,9 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
             print('User not found for email: $email');
           }
           // print("Login successfully");
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
-              arguments: {'selectedIndex': 0});
+          context.goNamed('home');
+          // Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
+          //     arguments: {'selectedIndex': 0});
         }
       }
     } catch (e) {
@@ -146,11 +148,11 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
 
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings.arguments;
-    UserProfile? userProfile;
-    if (arg is UserProfile) {
-      userProfile = arg;
-    }
+    // final arg = ModalRoute.of(context)!.settings.arguments;
+    // UserProfile? userProfile;
+    // if (arg is UserProfile) {
+    //   userProfile = arg;
+    // }
     return SafeArea(
       child: (Scaffold(
         body: Container(
@@ -171,10 +173,10 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                       Container(
                         height: 150,
                         width: 150,
-                        child: userProfile?.pathImage != null
+                        child: widget.users?.pathImage != null
                             ? CircleAvatar(
                                 backgroundImage:
-                                    FileImage(userProfile!.pathImage!),
+                                    FileImage(widget.users!.pathImage!),
                               )
                             : const CircleAvatar(
                                 backgroundImage:
@@ -197,7 +199,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                         height: 6,
                       ),
                       Text(
-                        userProfile!.fullname,
+                        widget.users!.fullname,
                         style: const TextStyle(
                             fontFamily: 'Raleway',
                             fontSize: 20,
@@ -216,7 +218,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                             backgroundColor: Color(0xff3E9D9D),
                             foregroundColor: Colors.white),
                         onPressed: () {
-                          createAccount(userProfile!);
+                          createAccount();
                         },
                         child: const Text(
                           "Create My Account",

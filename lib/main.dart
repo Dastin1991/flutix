@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutix/model/cinema_ticket.dart';
+import 'package:flutix/model/movie_model.dart';
+import 'package:flutix/model/movie_playing.dart';
+import 'package:flutix/model/transaction.dart';
 import 'package:flutix/model/user.dart';
 import 'package:flutix/ui/pages/change_profile.dart';
 import 'package:flutix/ui/pages/checkout_movie.dart';
@@ -45,6 +49,20 @@ class MyApp extends StatelessWidget {
             return const Init();
           }),
       GoRoute(
+        path: '/topup_success',
+        name: 'topup_success',
+        builder: (context, state) {
+          return const TopUpSuccess();
+        },
+      ),
+      GoRoute(
+        path: '/checkoutSuccess',
+        name: 'checkoutSuccess',
+        builder: (context, state) {
+          return const CheckoutSuccess();
+        },
+      ),
+      GoRoute(
           path: '/',
           name: 'onboarding',
           builder: (context, state) {
@@ -66,56 +84,122 @@ class MyApp extends StatelessWidget {
                 },
                 routes: [
                   GoRoute(
-                    path: 'genre',
-                    name: 'genre',
-                    builder: (context, state) {
-                      UserProfile users = state.extra as UserProfile;
-                      return Genre(users: users);
-                    },
-                  ),
-                  GoRoute(
-                    path: 'confirm',
-                    name: 'confirm',
-                    builder: (context, state) {
-                      UserProfile users = state.extra as UserProfile;
-                      return ConfirmAccount(users: users);
-                    },
-                  ),
+                      path: 'genre',
+                      name: 'genre',
+                      builder: (context, state) {
+                        UserProfile users = state.extra as UserProfile;
+                        return Genre(users: users);
+                      },
+                      routes: [
+                        GoRoute(
+                          path: 'confirm',
+                          name: 'confirm',
+                          builder: (context, state) {
+                            UserProfile users = state.extra as UserProfile;
+                            return ConfirmAccount(users: users);
+                          },
+                        ),
+                      ]),
                 ]),
           ]),
       GoRoute(
           path: '/home',
           name: 'home',
           builder: (context, state) {
-            return Menu(selectedIndex: 0);
-          })
+            return Menu(
+                selectedIndex:
+                    int.parse(state.uri.queryParameters['index'] ?? '0'));
+          },
+          routes: [
+            GoRoute(
+                path: 'profile',
+                name: 'profile',
+                builder: (context, state) {
+                  return const Profile();
+                },
+                routes: [
+                  GoRoute(
+                    path: 'change_profile',
+                    name: 'change_profile',
+                    builder: (context, state) {
+                      return const ChangeProfile();
+                    },
+                  ),
+                  GoRoute(
+                      path: 'mywallet',
+                      name: 'mywallet',
+                      builder: (context, state) {
+                        return const MyWallet();
+                      },
+                      routes: [
+                        GoRoute(
+                          path: 'ticketDetail',
+                          name: 'ticketDetail',
+                          builder: (context, state) {
+                            Transactions trans = state.extra as Transactions;
+                            return TicketDetail(transactions: trans);
+                          },
+                        )
+                      ])
+                ]),
+            GoRoute(
+                path: 'movieDetail',
+                name: 'movieDetail',
+                builder: (context, state) {
+                  MoviePlaying movies = state.extra as MoviePlaying;
+                  return MovieDetail(movie: movies);
+                },
+                routes: [
+                  GoRoute(
+                      path: 'chooseDate',
+                      name: 'chooseDate',
+                      builder: (context, state) {
+                        MoviePlaying movies = state.extra as MoviePlaying;
+                        return ChooseDate(movie: movies);
+                      },
+                      routes: [
+                        GoRoute(
+                            path: 'chooseRow',
+                            name: 'chooseRow',
+                            builder: (context, state) {
+                              CinemaTicket cinemaTicket =
+                                  state.extra as CinemaTicket;
+                              return ChooseRow(cinemaTicket: cinemaTicket);
+                            },
+                            routes: [
+                              GoRoute(
+                                  path: 'checkoutMovie',
+                                  name: 'checkoutMovie',
+                                  builder: (context, state) {
+                                    CinemaTicket cinemaTicket =
+                                        state.extra as CinemaTicket;
+                                    return CheckoutMovie(
+                                        cinemaTicket: cinemaTicket);
+                                  })
+                            ])
+                      ])
+                ]),
+            GoRoute(
+              path: 'topup',
+              name: 'topup',
+              builder: (context, state) {
+                return const TopUp();
+              },
+            ),
+            GoRoute(
+              path: 'my_wallet_home',
+              name: 'my_wallet_home',
+              builder: (context, state) {
+                return const MyWallet();
+              },
+            )
+          ])
     ], initialLocation: '/init', debugLogDiagnostics: true);
     return (MaterialApp.router(
+      routeInformationProvider: router.routeInformationProvider,
       routeInformationParser: router.routeInformationParser,
       routerDelegate: router.routerDelegate,
-      routeInformationProvider: router.routeInformationProvider,
       debugShowCheckedModeBanner: false,
-      // initialRoute: '/',
-      // routes: {
-      //   '/': (_) => const Init(),
-      //   '/onBoarding': (_) => const OnBoarding(),
-      //   '/signin': (_) => const SignIn(),
-      //   '/signup': (_) => const SignUp(),
-      //   '/genre': (_) => Genre(),
-      //   '/confirm': (_) => ConfirmAccount(),
-      //   '/home': (_) => Menu(selectedIndex: 0),
-      //   '/movieDetail': (_) => const MovieDetail(),
-      //   '/chooseDate': (_) => const ChooseDate(),
-      //   '/chooseRow': (_) => const ChooseRow(),
-      //   '/checkoutMovie': (_) => const CheckoutMovie(),
-      //   '/checkoutSuccess': (_) => const CheckoutSuccess(),
-      //   '/profile': (_) => const Profile(),
-      //   '/changeProfile': (_) => const ChangeProfile(),
-      //   '/myWallet': (_) => const MyWallet(),
-      //   '/topup': (_) => const TopUp(),
-      //   '/topupSuccess': (_) => const TopUpSuccess(),
-      //   '/ticketDetail': (_) => const TicketDetail(),
-      // },
     ));
   }
 }

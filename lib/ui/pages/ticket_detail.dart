@@ -12,14 +12,8 @@ class TicketDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings.arguments;
-    Transactions? transactions;
-
-    if (arg is Transactions) {
-      transactions = arg;
-    }
     return (Scaffold(
-      appBar: AppBar(title: Text("Ticket Detail")),
+      appBar: AppBar(title: const Text("Ticket Detail")),
       body: transactions != null
           ? SafeArea(
               child: SingleChildScrollView(
@@ -31,7 +25,7 @@ class TicketDetail extends StatelessWidget {
                         width: double.infinity,
                         height: 270,
                         child: Image(
-                          image: NetworkImage(transactions.link),
+                          image: NetworkImage(transactions!.link),
                           fit: BoxFit.cover,
                         )),
                     const SizedBox(
@@ -43,7 +37,7 @@ class TicketDetail extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            transactions.title,
+                            transactions!.title,
                             style: const TextStyle(
                                 fontFamily: 'Raleway', fontSize: 24),
                           ),
@@ -64,75 +58,75 @@ class TicketDetail extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
+                              const Text(
                                 'Cinema',
                                 style: TextStyle(
                                     fontFamily: 'Raleway',
                                     color: Color(0xFFADADAD)),
                               ),
-                              Text(transactions.cinema!)
+                              Text(transactions!.cinema!)
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
+                              const Text(
                                 'Date & Time',
                                 style: TextStyle(
                                     fontFamily: 'Raleway',
                                     color: Color(0xFFADADAD)),
                               ),
-                              Text(transactions.date!)
+                              Text(transactions!.date!)
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
+                              const Text(
                                 'Seat Number',
                                 style: TextStyle(
                                     fontFamily: 'Raleway',
                                     color: Color(0xFFADADAD)),
                               ),
-                              Text(transactions.seat!)
+                              Text(transactions!.seat!)
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
+                              const Text(
                                 'ID Order',
                                 style: TextStyle(
                                     fontFamily: 'Raleway',
                                     color: Color(0xFFADADAD)),
                               ),
-                              Text(transactions.id!.toString())
+                              Text(transactions!.id!.toString())
                             ],
                           ),
-                          Divider(),
+                          const Divider(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  const Text(
                                     'Name',
                                     style: TextStyle(
                                         fontFamily: 'Raleway',
                                         color: Color(0xFFADADAD)),
                                   ),
-                                  Text('Dadang Setiyawan'),
-                                  Text(
+                                  const Text('Dadang Setiyawan'),
+                                  const Text(
                                     'Paid',
                                     style: TextStyle(
                                         fontFamily: 'Raleway',
                                         color: Color(0xFFADADAD)),
                                   ),
-                                  Text(Utils.format(transactions.total!))
+                                  Text(Utils.format(transactions!.total!))
                                 ],
                               ),
-                              Image(
+                              const Image(
                                   image: AssetImage('assets/images/qrcode.png'))
                             ],
                           )

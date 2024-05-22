@@ -6,6 +6,7 @@ import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutix/ui/widgets/loading_modal.dart';
 import 'package:flutix/ui/widgets/topup_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TopUp extends StatefulWidget {
@@ -192,8 +193,7 @@ class _TopUpState extends State<TopUp> {
           }
 
           Navigator.of(context).pop();
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/topupSuccess', (route) => false);
+          context.goNamed('topup_success');
         }).catchError((error) {
           print("Failed to add wallet: $error");
         });
