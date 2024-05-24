@@ -8,6 +8,7 @@ import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -90,7 +91,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
         showToastMessage('Profile berhasil diupdate!');
 
-        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+        context.goNamed('init');
       } else {
         print('No user signed in');
       }

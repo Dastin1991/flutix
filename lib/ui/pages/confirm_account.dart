@@ -112,9 +112,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
             print('User not found for email: $email');
           }
           // print("Login successfully");
-          context.goNamed('home');
-          // Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
-          //     arguments: {'selectedIndex': 0});
+          context.goNamed('home', queryParameters: {'index': '0'});
         }
       }
     } catch (e) {

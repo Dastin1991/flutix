@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutix/model/cinema_ticket.dart';
@@ -162,7 +164,7 @@ class MyApp extends StatelessWidget {
                             path: 'chooseRow',
                             name: 'chooseRow',
                             builder: (context, state) {
-                              CinemaTicket cinemaTicket =
+                              final CinemaTicket cinemaTicket =
                                   state.extra as CinemaTicket;
                               return ChooseRow(cinemaTicket: cinemaTicket);
                             },

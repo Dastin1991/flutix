@@ -214,7 +214,6 @@ class _SignUpState extends State<SignUp> {
           password: password,
           pathImage: _image);
       context.goNamed('genre', extra: users);
-      // Navigator.pushNamed(context, '/genre', arguments: users);
     }
   }
 

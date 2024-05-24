@@ -34,8 +34,6 @@ class _GenreState extends State<Genre> {
   List<String> selectedMovie = <String>[];
 
   Future confirmAccount() async {
-    print('navigate to confirm account');
-    print(widget.users!.password);
     List<String> selectedGenres =
         selectedGenre.map((index) => myGenre[int.parse(index)]).toList();
     List<String> selectedMovies =
@@ -140,23 +138,6 @@ class _GenreState extends State<Genre> {
                     ? true
                     : false,
                 onTap: () {
-                  // List<String> selectedGenres = selectedGenre
-                  //     .map((index) => myGenre[int.parse(index)])
-                  //     .toList();
-                  // List<String> selectedMovies = selectedMovie
-                  //     .map((index) => myMovie[int.parse(index)])
-                  //     .toList();
-                  // UserProfile users = UserProfile(
-                  //     fullname: userProfile!.fullname,
-                  //     email: userProfile!.email,
-                  //     pathImage:
-                  //         userProfile?.pathImage ?? userProfile.pathImage,
-                  //     password: userProfile.password,
-                  //     genre: selectedGenres.join(','),
-                  //     language: selectedMovies.join(','));
-                  // Navigator.pushNamed(context, '/confirm', arguments: users);
-                  // // context.goNamed('confirm', extra: users);
-                  // print('navigate to confirm account');
                   confirmAccount();
                 },
               )

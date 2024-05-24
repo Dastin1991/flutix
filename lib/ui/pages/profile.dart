@@ -45,7 +45,7 @@ class _ProfileState extends State<Profile> {
     await prefs.setString('email', "");
 
     // Navigate to the desired screen
-    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    context.goNamed('init');
   }
 
   @override

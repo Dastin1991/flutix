@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutix/model/cinema.dart';
 import 'package:flutix/model/cinema_ticket.dart';
 import 'package:flutix/model/cinema_time.dart';
@@ -6,10 +7,8 @@ import 'package:flutix/model/movie_playing.dart';
 import 'package:flutix/services/utils.dart';
 import 'package:flutix/ui/widgets/cinema_tile.dart';
 import 'package:flutix/ui/widgets/dates_tile.dart';
-import 'package:flutix/ui/widgets/genre_tile.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutix/ui/widgets/header.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ChooseDate extends StatefulWidget {
@@ -73,15 +72,13 @@ class _ChooseDateState extends State<ChooseDate> {
   ];
 
   List<String> selectedDate = <String>[];
-  List<String> selectedTime = <String>[];
   Dates _selectedDate = Dates(date: "", day: "", fulldate: "");
-  int timeId = 0;
   CinemaTime cinemaTimeSelected = CinemaTime(id: 0, cinemaName: "", time: "");
   CinemaTicket _cinemaTicket = CinemaTicket();
 
   @override
   Widget build(BuildContext context) {
-    return (Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -113,16 +110,17 @@ class _ChooseDateState extends State<ChooseDate> {
                         spacing: 10,
                         runSpacing: 10,
                         children: List.generate(
-                            dates.length,
-                            (index) => DatesTile(
-                                dates: dates[index],
-                                selected:
-                                    selectedDate.contains(index.toString())
-                                        ? true
-                                        : false,
-                                onTap: () {
-                                  _onSelectedDate(index);
-                                })),
+                          dates.length,
+                          (index) => DatesTile(
+                            dates: dates[index],
+                            selected: selectedDate.contains(index.toString())
+                                ? true
+                                : false,
+                            onTap: () {
+                              _onSelectedDate(index);
+                            },
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -133,17 +131,18 @@ class _ChooseDateState extends State<ChooseDate> {
                             spacing: 10,
                             runSpacing: 10,
                             children: List.generate(
-                                cinemas.length,
-                                (index) => CinemaTile(
-                                      cinemas: cinemas[index],
-                                      cinemaTime: cinemaTimeSelected,
-                                      selectedDate: _selectedDate.fulldate,
-                                      onTap: (selectedCinemaTime) {
-                                        _onSelectedTime(selectedCinemaTime);
-                                      },
-                                    )),
+                              cinemas.length,
+                              (index) => CinemaTile(
+                                cinemas: cinemas[index],
+                                cinemaTime: cinemaTimeSelected,
+                                selectedDate: _selectedDate.fulldate,
+                                onTap: (selectedCinemaTime) {
+                                  _onSelectedTime(selectedCinemaTime);
+                                },
+                              ),
+                            ),
                           )
-                        : Container()
+                        : Container(),
                   ],
                 ),
               ),
@@ -151,15 +150,14 @@ class _ChooseDateState extends State<ChooseDate> {
                 height: 30,
               ),
               ButtonIcon(
-                enabled: selectedDate.isNotEmpty && cinemaTimeSelected.id > 0
-                    ? true
-                    : false,
+                enabled: selectedDate.isNotEmpty && cinemaTimeSelected.id > 0,
                 onTap: () {
                   _cinemaTicket = CinemaTicket(
-                      movie: widget.movie,
-                      date: "${_selectedDate.day} ${_selectedDate.date}",
-                      time: cinemaTimeSelected.time,
-                      cinema: cinemaTimeSelected.cinemaName);
+                    movie: widget.movie,
+                    date: "${_selectedDate.day} ${_selectedDate.date}",
+                    time: cinemaTimeSelected.time,
+                    cinema: cinemaTimeSelected.cinemaName,
+                  );
 
                   context.goNamed('chooseRow', extra: _cinemaTicket);
                 },
@@ -168,7 +166,7 @@ class _ChooseDateState extends State<ChooseDate> {
           ),
         ),
       ),
-    ));
+    );
   }
 
   void _onSelectedDate(int index) {
@@ -176,9 +174,10 @@ class _ChooseDateState extends State<ChooseDate> {
       selectedDate = [];
       selectedDate.add(index.toString());
       _selectedDate = Dates(
-          date: dates[index].date,
-          day: dates[index].day,
-          fulldate: dates[index].fulldate);
+        date: dates[index].date,
+        day: dates[index].day,
+        fulldate: dates[index].fulldate,
+      );
     });
   }
 

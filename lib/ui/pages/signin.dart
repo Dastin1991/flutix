@@ -5,6 +5,7 @@ import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutix/ui/widgets/loading_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignIn extends StatefulWidget {
@@ -140,7 +141,7 @@ class _SignInState extends State<SignIn> {
                           width: 6,
                         ),
                         InkWell(
-                          onTap: () => Navigator.pushNamed(context, '/signup'),
+                          onTap: () => context.goNamed('signup'),
                           child: const Text(
                             "Sign Up",
                             style: TextStyle(
@@ -210,8 +211,7 @@ class _SignInState extends State<SignIn> {
         }
         // print("Login successfully");
         Navigator.of(context).pop();
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
-            arguments: {'selectedIndex': 0});
+        context.goNamed('home', queryParameters: {'index': '0'});
       }
     } catch (e) {
       Navigator.of(context).pop();
