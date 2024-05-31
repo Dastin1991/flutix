@@ -1,6 +1,7 @@
 import 'package:flutix/model/movie_playing.dart';
 import 'package:flutix/model/ticket.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class TicketCard extends StatelessWidget {
   final MTicket ticket;
@@ -28,35 +29,36 @@ class TicketCard extends StatelessWidget {
             const SizedBox(
               width: 16,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 240,
-                  child: Text(
-                    ticket.title,
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    child: Text(
+                      ticket.title,
+                      style: const TextStyle(
+                          fontFamily: 'Raleway',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  Text(
+                    ticket.genre,
                     style: const TextStyle(
                         fontFamily: 'Raleway',
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500),
+                        fontSize: 12,
+                        color: Color(0xFFADADAD)),
                   ),
-                ),
-                Text(
-                  ticket.genre,
-                  style: const TextStyle(
-                      fontFamily: 'Raleway',
-                      fontSize: 12,
-                      color: Color(0xFFADADAD)),
-                ),
-                Text(
-                  ticket.location,
-                  style: const TextStyle(
-                      fontFamily: 'Raleway',
-                      fontSize: 12,
-                      color: Color(0xFFADADAD)),
-                ),
-              ],
+                  Text(
+                    ticket.location,
+                    style: const TextStyle(
+                        fontFamily: 'Raleway',
+                        fontSize: 12,
+                        color: Color(0xFFADADAD)),
+                  ),
+                ],
+              ),
             )
           ],
         ),

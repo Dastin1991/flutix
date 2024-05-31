@@ -1,6 +1,8 @@
+import 'package:flutix/ui/pages/bloc/user_bloc.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutix/ui/widgets/separator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -58,172 +60,181 @@ class _ProfileState extends State<Profile> {
             const SizedBox(
               height: 24,
             ),
-            Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: profileUrl.isNotEmpty
-                      ? Image(
-                          image: NetworkImage(profileUrl),
-                          height: 120,
-                          width: 120,
-                          fit: BoxFit.cover,
-                        )
-                      : CircleAvatar(
-                          radius: 50,
-                          backgroundImage:
-                              AssetImage('assets/images/user_pic.png')),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  fullname,
-                  style: const TextStyle(fontFamily: 'Raleway', fontSize: 18),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  email,
-                  style: const TextStyle(
-                      fontFamily: 'Raleway',
-                      fontSize: 16,
-                      color: Color(0xFFADADAD)),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: (() {
-                          context.goNamed('change_profile');
-                        }),
-                        child: const Row(
-                          children: [
-                            Image(
-                              image: AssetImage('assets/images/ic_account.png'),
-                              height: 24,
-                              width: 24,
+            BlocBuilder<UserBloc, UserState>(
+              builder: (context, state) {
+                return Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: profileUrl.isNotEmpty
+                          ? Image(
+                              image: NetworkImage(profileUrl),
+                              height: 120,
+                              width: 120,
+                              fit: BoxFit.cover,
+                            )
+                          : const CircleAvatar(
+                              radius: 50,
+                              backgroundImage:
+                                  AssetImage('assets/images/user_pic.png')),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      state is UserSignedIn ? state.userProfile.fullname : '-',
+                      style:
+                          const TextStyle(fontFamily: 'Raleway', fontSize: 18),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      email,
+                      style: const TextStyle(
+                          fontFamily: 'Raleway',
+                          fontSize: 16,
+                          color: Color(0xFFADADAD)),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: (() {
+                              context.goNamed('change_profile');
+                            }),
+                            child: const Row(
+                              children: [
+                                Image(
+                                  image: AssetImage(
+                                      'assets/images/ic_account.png'),
+                                  height: 24,
+                                  width: 24,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Edit Profile",
+                                  style: TextStyle(
+                                      fontFamily: 'Raleway', fontSize: 16),
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              width: 10,
+                          ),
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          const Separator(),
+                          GestureDetector(
+                            onTap: (() => context.goNamed('mywallet')),
+                            child: const Row(
+                              children: [
+                                Image(
+                                  image:
+                                      AssetImage('assets/images/ic_wallet.png'),
+                                  height: 24,
+                                  width: 24,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "My Wallet",
+                                  style: TextStyle(
+                                      fontFamily: 'Raleway', fontSize: 16),
+                                ),
+                              ],
                             ),
-                            Text(
-                              "Edit Profile",
+                          ),
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          const Separator(),
+                          const Row(
+                            children: [
+                              Image(
+                                image:
+                                    AssetImage('assets/images/ic_language.png'),
+                                height: 24,
+                                width: 24,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Change Language",
+                                style: TextStyle(
+                                    fontFamily: 'Raleway', fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          const Separator(),
+                          const Row(
+                            children: [
+                              Image(
+                                image: AssetImage('assets/images/ic_help.png'),
+                                height: 24,
+                                width: 24,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Help Centre",
+                                style: TextStyle(
+                                    fontFamily: 'Raleway', fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          const Separator(),
+                          const Row(
+                            children: [
+                              Image(
+                                image: AssetImage('assets/images/ic_rate.png'),
+                                height: 24,
+                                width: 24,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Rate Flutix App",
+                                style: TextStyle(
+                                    fontFamily: 'Raleway', fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          const Separator(),
+                          GestureDetector(
+                            onTap: () async {
+                              context.read<UserBloc>().add(SignOut());
+                              // await logout(context);
+                            },
+                            child: const Text(
+                              "Logout",
                               style: TextStyle(
-                                  fontFamily: 'Raleway', fontSize: 16),
+                                  color: Colors.redAccent,
+                                  fontSize: 16,
+                                  fontFamily: 'Raleway'),
                             ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 6,
-                      ),
-                      const Separator(),
-                      GestureDetector(
-                        onTap: (() => context.goNamed('mywallet')),
-                        child: const Row(
-                          children: [
-                            Image(
-                              image: AssetImage('assets/images/ic_wallet.png'),
-                              height: 24,
-                              width: 24,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "My Wallet",
-                              style: TextStyle(
-                                  fontFamily: 'Raleway', fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 6,
-                      ),
-                      const Separator(),
-                      const Row(
-                        children: [
-                          Image(
-                            image: AssetImage('assets/images/ic_language.png'),
-                            height: 24,
-                            width: 24,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Change Language",
-                            style:
-                                TextStyle(fontFamily: 'Raleway', fontSize: 16),
-                          ),
+                          )
                         ],
                       ),
-                      const Separator(),
-                      const Row(
-                        children: [
-                          Image(
-                            image: AssetImage('assets/images/ic_help.png'),
-                            height: 24,
-                            width: 24,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Help Centre",
-                            style:
-                                TextStyle(fontFamily: 'Raleway', fontSize: 16),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 6,
-                      ),
-                      const Separator(),
-                      const Row(
-                        children: [
-                          Image(
-                            image: AssetImage('assets/images/ic_rate.png'),
-                            height: 24,
-                            width: 24,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Rate Flutix App",
-                            style:
-                                TextStyle(fontFamily: 'Raleway', fontSize: 16),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 6,
-                      ),
-                      const Separator(),
-                      GestureDetector(
-                        onTap: () async {
-                          await logout(context);
-                        },
-                        child: const Text(
-                          "Logout",
-                          style: TextStyle(
-                              color: Colors.redAccent,
-                              fontSize: 16,
-                              fontFamily: 'Raleway'),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                    )
+                  ],
+                );
+              },
             )
           ],
         ),

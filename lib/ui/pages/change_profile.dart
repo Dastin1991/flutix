@@ -4,9 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutix/services/utils.dart';
+import 'package:flutix/ui/pages/bloc/user_bloc.dart';
 import 'package:flutix/ui/widgets/header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -90,8 +92,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
         }
 
         showToastMessage('Profile berhasil diupdate!');
-
-        context.goNamed('init');
+        context.read<UserBloc>().add(CheckSignInStatus());
       } else {
         print('No user signed in');
       }

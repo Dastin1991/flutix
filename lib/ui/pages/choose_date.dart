@@ -24,7 +24,7 @@ class _ChooseDateState extends State<ChooseDate> {
 
   List<Cinema> cinemas = [
     Cinema(name: "Paris Van Java", times: [
-      CinemaTime(id: 1, cinemaName: "Paris Van Java", time: "12:20"),
+      CinemaTime(id: 1, cinemaName: "Paris Van Java", time: "08:20"),
       CinemaTime(id: 2, cinemaName: "Paris Van Java", time: "12:50"),
       CinemaTime(id: 3, cinemaName: "Paris Van Java", time: "14:25"),
       CinemaTime(id: 4, cinemaName: "Paris Van Java", time: "14:55"),
@@ -74,7 +74,7 @@ class _ChooseDateState extends State<ChooseDate> {
   List<String> selectedDate = <String>[];
   Dates _selectedDate = Dates(date: "", day: "", fulldate: "");
   CinemaTime cinemaTimeSelected = CinemaTime(id: 0, cinemaName: "", time: "");
-  CinemaTicket _cinemaTicket = CinemaTicket();
+  // CinemaTicket _cinemaTicket = CinemaTicket();
 
   @override
   Widget build(BuildContext context) {
@@ -152,14 +152,15 @@ class _ChooseDateState extends State<ChooseDate> {
               ButtonIcon(
                 enabled: selectedDate.isNotEmpty && cinemaTimeSelected.id > 0,
                 onTap: () {
-                  _cinemaTicket = CinemaTicket(
+                  CinemaTicket cinemaTicket = CinemaTicket(
                     movie: widget.movie,
                     date: "${_selectedDate.day} ${_selectedDate.date}",
                     time: cinemaTimeSelected.time,
                     cinema: cinemaTimeSelected.cinemaName,
                   );
 
-                  context.goNamed('chooseRow', extra: _cinemaTicket);
+                  // context.goNamed('chooseRow');
+                  context.goNamed('chooseRow', extra: cinemaTicket);
                 },
               )
             ],

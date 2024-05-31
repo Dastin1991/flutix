@@ -8,6 +8,7 @@ class UserProfile {
   String? genre;
   String? language;
   File? pathImage;
+  String? token;
 
   UserProfile(
       {required this.fullname,
@@ -16,5 +17,6 @@ class UserProfile {
       this.photo,
       this.genre,
       this.language,
-      this.pathImage});
+      this.pathImage,
+      this.token});
 }

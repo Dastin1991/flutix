@@ -2,6 +2,7 @@ import 'package:flutix/model/movie_playing.dart';
 import 'package:flutix/model/ticket.dart';
 import 'package:flutix/model/transaction.dart';
 import 'package:flutix/services/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -62,39 +63,38 @@ class TransactionCard extends StatelessWidget {
               const SizedBox(
                 width: 16,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 240,
-                    child: Text(
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
                       transactions.title,
                       style: const TextStyle(
                           fontFamily: 'Raleway',
                           fontSize: 18,
                           fontWeight: FontWeight.w500),
                     ),
-                  ),
-                  Text(
-                    Utils.format(transactions.total!),
-                    style: TextStyle(
-                        fontFamily: 'Raleway',
-                        fontSize: 16,
-                        color: transactions.type == 'topup'
-                            ? Color(0xFF3E9D9D)
-                            : Color(0xFFFF5C83)),
-                  ),
-                  Text(
-                    transactions.type == 'topup'
-                        ? transactions.date!
-                        : transactions.cinema!,
-                    style: const TextStyle(
-                        fontFamily: 'Raleway',
-                        fontSize: 12,
-                        color: Color(0xFFADADAD)),
-                  ),
-                ],
+                    Text(
+                      Utils.format(transactions.total!),
+                      style: TextStyle(
+                          fontFamily: 'Raleway',
+                          fontSize: 16,
+                          color: transactions.type == 'topup'
+                              ? Color(0xFF3E9D9D)
+                              : Color(0xFFFF5C83)),
+                    ),
+                    Text(
+                      transactions.type == 'topup'
+                          ? transactions.date!
+                          : transactions.cinema!,
+                      style: const TextStyle(
+                          fontFamily: 'Raleway',
+                          fontSize: 12,
+                          color: Color(0xFFADADAD)),
+                    ),
+                  ],
+                ),
               )
             ],
           ),

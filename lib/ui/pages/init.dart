@@ -16,7 +16,7 @@ class _InitState extends State<Init> {
 
   @override
   void initState() {
-    checkSharedPreferences();
+    // checkSharedPreferences();
     super.initState();
   }
 

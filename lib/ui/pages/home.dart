@@ -7,6 +7,7 @@ import 'package:flutix/model/movie_model.dart';
 import 'package:flutix/model/movie_playing.dart';
 import 'package:flutix/services/utils.dart';
 import 'package:flutix/ui/pages/bloc/home_bloc.dart';
+import 'package:flutix/ui/pages/bloc/user_bloc.dart';
 import 'package:flutix/ui/widgets/category_card.dart';
 import 'package:flutix/ui/widgets/comingsoon_card.dart';
 import 'package:flutix/ui/widgets/lucky_day_card.dart';
@@ -66,10 +67,10 @@ class _HomePageState extends State<HomePage> {
     String? _fullname = prefs.getString('fullname');
     // String? _profile_url = prefs.getString('profile_url');
 
-    setState(() {
-      fullname =
-          _fullname!; // Update the state variable with the retrieved fullname
-    });
+    // setState(() {
+    //   fullname =
+    //       _fullname!; // Update the state variable with the retrieved fullname
+    // });
 
     DocumentSnapshot userSnapshot = await getUserByEmail(email!);
 
@@ -99,7 +100,7 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           balance = Utils.format(userBalance)
               .toString(); // Update the state variable with the retrieved balance
-          fullname = _fullname!;
+          // fullname = _fullname!;
           profile_url =
               userProfile; // Update the state variable with the retrieved fullname
         });
@@ -417,64 +418,71 @@ class _HomePageState extends State<HomePage> {
               top: 0,
               left: 0,
               right: 0,
-              child: Container(
-                padding: const EdgeInsets.only(top: 30),
-                width: double.infinity,
-                height: 144,
-                decoration: const BoxDecoration(
-                    color: Color(0xff2C1F63),
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20))),
-                child: Container(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: SizedBox(
-                    height: 50,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          height: 64,
-                          width: 64,
-                          child: GestureDetector(
-                            onTap: () {
-                              context.goNamed('profile');
-                            },
-                            child: profile_url.isNotEmpty
-                                ? CircleAvatar(
-                                    backgroundImage: NetworkImage(profile_url),
-                                  )
-                                : const CircleAvatar(
-                                    backgroundImage: AssetImage(
-                                        'assets/images/user_pic.png')),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 12),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "$fullname",
-                                style: const TextStyle(
-                                    fontFamily: 'Raleway',
-                                    fontSize: 18,
-                                    color: Colors.white),
+              child: BlocBuilder<UserBloc, UserState>(
+                builder: (context, state) {
+                  return Container(
+                    padding: const EdgeInsets.only(top: 30),
+                    width: double.infinity,
+                    height: 144,
+                    decoration: const BoxDecoration(
+                        color: Color(0xff2C1F63),
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20))),
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: SizedBox(
+                        height: 50,
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              height: 64,
+                              width: 64,
+                              child: GestureDetector(
+                                onTap: () {
+                                  context.goNamed('profile');
+                                },
+                                child: profile_url.isNotEmpty
+                                    ? CircleAvatar(
+                                        backgroundImage:
+                                            NetworkImage(profile_url),
+                                      )
+                                    : const CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            'assets/images/user_pic.png')),
                               ),
-                              Text(
-                                balance.toString(),
-                                style: const TextStyle(
-                                    fontFamily: 'Raleway',
-                                    fontSize: 18,
-                                    color: Color(0xFFFBD460)),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.only(left: 12),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    state is UserSignedIn
+                                        ? state.userProfile.fullname
+                                        : '-',
+                                    style: const TextStyle(
+                                        fontFamily: 'Raleway',
+                                        fontSize: 18,
+                                        color: Colors.white),
+                                  ),
+                                  Text(
+                                    balance.toString(),
+                                    style: const TextStyle(
+                                        fontFamily: 'Raleway',
+                                        fontSize: 18,
+                                        color: Color(0xFFFBD460)),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             )
           ],

@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutix/services/auth_services.dart';
+import 'package:flutix/ui/pages/bloc/user_bloc.dart';
 import 'package:flutix/ui/widgets/button_icon.dart';
 import 'package:flutix/ui/widgets/loading_modal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -121,6 +123,9 @@ class _SignInState extends State<SignIn> {
                     ButtonIcon(
                       enabled: _isButtonEnabled,
                       onTap: () {
+                        // context.read<UserBloc>().add(SignInBloc(
+                        //     email: _emailController.text,
+                        //     password: _passwordController.text));
                         _signIn();
                       },
                     ),
@@ -184,35 +189,38 @@ class _SignInState extends State<SignIn> {
   Future<void> _signIn() async {
     String email = _emailController.text;
     String password = _passwordController.text;
-    showCustomDialog(context);
+    // showCustomDialog(context);
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      context
+          .read<UserBloc>()
+          .add(SignInBloc(email: email, password: password));
+      // UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      //   email: email,
+      //   password: password,
+      // );
 
-      User? user = userCredential.user;
-      if (user != null) {
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString("email", user.email.toString());
+      // User? user = userCredential.user;
+      // if (user != null) {
+      //   SharedPreferences pref = await SharedPreferences.getInstance();
+      //   pref.setString("email", user.email.toString());
 
-        pref.setBool("isLogin", true);
+      //   pref.setBool("isLogin", true);
 
-        DocumentSnapshot userSnapshot = await getUserByEmail(email!);
+      //   DocumentSnapshot userSnapshot = await getUserByEmail(email!);
 
-        if (userSnapshot.exists) {
-          // User data found, you can access it using userSnapshot.data()
-          Map<String, dynamic> userData =
-              userSnapshot.data() as Map<String, dynamic>;
-          String userFullname = userData['fullname'];
-          pref.setString("fullname", userFullname);
-        } else {
-          print('User not found for email: $email');
-        }
-        // print("Login successfully");
-        Navigator.of(context).pop();
-        context.goNamed('home', queryParameters: {'index': '0'});
-      }
+      //   if (userSnapshot.exists) {
+      //     // User data found, you can access it using userSnapshot.data()
+      //     Map<String, dynamic> userData =
+      //         userSnapshot.data() as Map<String, dynamic>;
+      //     String userFullname = userData['fullname'];
+      //     pref.setString("fullname", userFullname);
+      //   } else {
+      //     print('User not found for email: $email');
+      //   }
+      //   // print("Login successfully");
+      //   Navigator.of(context).pop();
+      //   context.goNamed('home', queryParameters: {'index': '0'});
+      // }
     } catch (e) {
       Navigator.of(context).pop();
       String errorMessage = "An error occurred";
